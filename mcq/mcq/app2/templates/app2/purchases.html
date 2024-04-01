@@ -1,0 +1,203 @@
+
+{% extends 'app2/base.html' %}
+{% load static %}
+{% block title %} 
+Purchases
+{% endblock %}
+{% block body %}
+<title>Purchases</title>
+
+            <!-- ============================================================== -->
+            <!-- Start Page Content here -->
+            <!-- ============================================================== -->
+
+            <div class="content-page">
+                <div class="content">
+
+                    <!-- Start Content-->
+                    <div class="container-fluid">
+                       
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box">
+                                  
+                                    <h4 class="page-title">Purchases</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+                     
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row mb-2">
+                                         <div class="col-sm-5">
+                                                {% comment %} <a href="{% url 'dashboard:add_OurTeam'%}" class="btn btn-danger mb-2"><i class="mdi mdi-plus-circle me-2"></i> Add Our Team</a> {% endcomment %}
+
+
+                                            </div> 
+                                        </div>
+                                        
+
+                                        <div class="table-responsive"style="overflow-x: auto; width: 100%;" >
+                                            <table class="table table-striped dt-responsive w-100 " id=""  >
+                                                    <tr>
+                                                       
+                                                      
+                                                        <th >Id</th>
+                                                        <th >User</th>
+                                                        <th> Sets</th>
+                                                        <th>Payment_status</th>
+                                                        <th>Payment_method</th>
+                                                        
+                                                        <th>Payment_slip</th>
+                                                        <th>Paid_amount</th>
+                                                        
+                                                        <th style="width: 120px;">Action</th>
+                                                    </tr>
+                                                                                                
+                                        {%for item in details%}
+
+                                        <tr>
+                                                            
+
+                                  
+                                            <td>
+                                                {{forloop.counter}}
+                                            </td>
+                                            <td>
+                                                {{item.user}}
+                                            </td>
+                                            <td>
+                                                {{item.sets}}
+                                            </td>
+                                            <td>
+                                                {% comment %} {{item.payment_status}} {% endcomment %}
+
+
+                                                <form method="post" action="{% url 'dashboard:update_purchase_list' item.id %}">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="id" value="{{ item.users.id }}">
+                          
+                                                    <select onchange="form.submit()" name="payment_status" class="rounded form-control">
+                                                      <option value="paid" {% if item.payment_status == 'paid' %} selected {% endif %} > Paid</option>
+                                                      <option value="pending" {% if item.payment_status == 'pending' %}selected{% endif %}>Pending</option>
+     
+                                                      
+                                                    </select>
+                                                  </form>
+                                            </td>
+                                            <td>
+                                                {{item.payment_method}}
+                                            </td>
+                                            <td>
+                                                <div class="image-gallery">
+                                                    <img class="thumbnail" src="{{item.payment_slip.url}}" alt="Thumbnail Image">
+                                                    <!-- Add more thumbnail images here if you have multiple images in the gallery -->
+                                                </div>
+                                                <div class="modal" id="imageModal">
+                                                    <span class="close-btn" onclick="closeModal()">&times;</span>
+                                                    <img class="modal-content" id="modalImage">
+                                                </div>
+                                            
+                                                <script src="script.js"></script>
+                                            </td>
+                                            <td>
+                                                {{item.paid_amount}}
+                                            </td>
+                                           
+                                            <td style ="display:inline-block; margin-right:5px;" >
+                                                {% comment %} <a href="{% url 'dashboard:edit_OurTeam' item.id %}" class="font-18 text-info" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><i class="uil uil-pen"></i></a> {% endcomment %}
+                                                <a href="#OurTeamDeleteModel{{item.id}}" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                            </td> 
+                                         
+                                        </tr>
+                                        {%endfor%}
+                                                                            
+                             </table>                                         
+                                        
+                                    </div>
+                                    <nav>
+                                        <ul class="pagination pagination-rounded mb-0">
+                                            {% if details.has_previous %}
+                                                <li class="page-item"><a href="?page=1" class="page-link">First</a></li>
+                                                <li class="page-item"><a href="?page={{ details.previous_page_number }}" class="page-link">Previous</a></li>
+                                            {% endif %}
+
+                                            {% for num in details.paginator.page_range %}
+                                                {% if details.number == num %}
+                                                    <li class="page-item active"><a href="?page={{ num }}" class="page-link">{{ num }}</a></li>
+                                                {% else %}
+                                                    <li class="page-item"><a href="?page={{ num }}" class="page-link">{{ num }}</a></li>
+                                                {% endif %}
+                                            {% endfor %}
+
+                                            {% if details.has_next %}
+                                                <li class="page-item"><a href="?page={{ details.next_page_number }}" class="page-link">Next</a></li>
+                                                <li class="page-item"><a href="?page={{ details.paginator.num_pages }}" class="page-link">Last</a></li>
+                                            {% endif %}
+                                        </ul>
+                                    </nav>
+                                    <div class="modal" id="imageModal">
+                                        <div class="modal-content">
+                                            <img src="" alt="Full Image" class="modal-image" id="modalImage">
+                                        </div>
+                                    </div>
+                                    </div> <!-- end card-body-->
+                                </div> <!-- end card-->
+                            </div> <!-- end col -->
+                        </div>
+                        <!-- end row -->
+                        
+                    </div> <!-- container -->
+                
+
+                </div> <!-- content -->
+                	<!-- Delete Modal HTML -->
+          
+ 
+    {% block content %}
+    {% for item in details %}
+        <div class="modal fade"  id="OurTeamDeleteModel{{ item.id }}"  tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content custom-modal">
+                        <div class="modal-footer">
+                            Are you sure you want to delete this purchases Id Number #{{ item.id }}
+                          
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <form method="post" action="{% url 'dashboard:deletepurchases' item.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+        
+                                </div>
+                    {% endfor %}
+                    <style>
+
+                    .custom-modal {
+                        background-color: white; 
+                    }
+                    </style>
+                    <link rel="stylesheet" type="text/css" href="{% static 'css/custom.css' %}">
+
+                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+                    <script>
+                        $(document).ready(function () {
+                            $('#OurTeamdeleteModal').modal('show');
+                        });
+                    </script>
+                    {% endblock %} 
+
+                    {% endblock %}
+              
+
+  

@@ -1,0 +1,229 @@
+
+
+{% extends 'app2/base.html' %}
+{% load static %}
+{% block title %} 
+{% if instance %}Edit Questions and Answers{% else %}Edit Questions and Answers{% endif %}
+{% endblock %}
+{% block body %}
+<title>{% if instance %}Edit Questions and Answers{% else %}Edit Questions and Answers{% endif %}
+</title>
+<style>
+    #id_question,#id_group{
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+
+    #id_question,#id_marks{
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+      #id_image{
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+
+      #id_audio{
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+     #id_set_name{
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+     
+      [id^="id_answers-"][id$="-DELETE"],
+      [for^="id_answers-"][for$="-DELETE"] {
+          display: none;
+      }
+    
+    [id^="id_answers-"]:not([id$="-DELETE"]):not([id$="-correct"]) {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+  
+</style>
+
+            <!-- ============================================================== -->
+            <!-- Start Page Content here -->
+            <!-- ============================================================== -->
+
+            <div class="content-page">
+                <div class="content">
+
+                    <!-- Start Content-->
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box">
+                                    <h4 class="page-title">{% if instance %}Edit Questions and Answers{% else %}Edit Questions and Answers{% endif %}
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+                      
+                        <form method="post" enctype="multipart/form-data" action="{% if question_form.instance.id %}{% url 'dashboard:edit_question' question_form.instance.id %}{% else %}{% url 'dashboard:create_question' %}{% endif %}" id="question-form">
+                            {% csrf_token %}
+                            {{ question_form.media }}
+                             {% if messages %}
+                                {% for msg in messages %}
+                                    <div class="alert alert-{{ msg.tags }} alert-dismissible text-bg-{{ msg.tags }} border-0 fade show" role="alert">
+                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        <strong>{% if msg.tags == 'success' %}Success{% elif msg.tags == 'warning' %}Warning{% endif %} - </strong>{{ msg.message }}
+                                    </div>
+                                {% endfor %}
+                            {% endif %} 
+                
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+
+
+                                    
+                                            <div class="row">
+                                                
+                                                <input type="hidden" name="set_name" id="set_id" value="{{ question_form.set_name.value }}">
+
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label for="id_question" class="form-label">Group</label><br>
+                                                        {{ question_form.group }}
+                                                        {{ question_form.group.errors }}
+                                                    </div>
+                                              
+                                                </div>
+                                                
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label for="id_question" class="form-label">Makrs</label><br>
+                                                        {{ question_form.marks }}
+                                                        {{ question_form.marks.errors }}
+                                                    </div>
+                                              
+                                                </div>
+                                            </div>
+                                                
+                                            <div class="row">
+                                             
+                                                    <div class="col-md-12">
+                                                    <div class="mb-3">
+                                                        <label for="id_question" class="form-label">Question</label><br>
+                                                        {{ question_form.question }}
+                                                        {{ question_form.question.errors }}
+                                                    </div>
+                                                    </div>
+                                               
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+
+                                                    <label for="id_set_name"  class="form-label">Audio</label><br>
+
+                                                         {{question_form.audio}}
+                                                    </div>
+                                                </div>
+                                                    <div class="col-md-6">
+                    
+                                                    <div class="mb-3">
+                                                        <label for="id_set_name"  class="form-label">Image</label><br>
+                                                            {{question_form.image}}                                                    </div>
+                                                          </div>
+                                                
+                                                
+                                                    </div>
+                                            
+                                  
+                                                    <div class="row">
+                                                {{ formset.management_form }}
+                                                {% for form in formset.forms %}
+                                                    <div class="col-xl-6">
+                                                      <b style="color: red;">  {{forloop.counter}}. Option</b> {{ form.as_p }}
+                                                    </div>
+                                                {% endfor %}
+                                                </div>
+                                                <div class="col-lg-12">
+                                                  
+                                                        <button type="submit" class="btn btn-primary">Update</button>
+                                                        <button type="button" onclick="goBack()" class="btn btn-secondary">Back</button>
+
+                                                </div>
+                                            </div>
+                                     
+
+                                        </div>
+                                    </div>
+
+
+                                   
+                                        </div>
+                                        <!-- end row -->
+
+                                </div> <!-- end card-->
+                            </div> <!-- end col-->
+                        </div>
+                        <!-- end row-->
+                    </form>
+
+                    </div> <!-- container -->
+
+                </div> <!-- content -->
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+
+                <script>
+                    function goBack() {
+                        window.history.back();
+                    }
+                
+                    document.getElementById('question-form').addEventListener('submit', function(event) {
+                        var correctAnswerCount = document.querySelectorAll('[id$="-correct"]:checked').length;
+                        if (correctAnswerCount !== 1) {
+                            alert("Please select exactly one correct answer.");
+                            event.preventDefault();
+                        }
+                    });
+                </script>
+                
+                <script>
+                    $(document).ready(function() {
+                        $("#category").change(function() {
+                            var url = $("#form").attr("data-courses-url");
+                            var programmingId = $(this).val();
+                            console.log(programmingId);
+                            $.ajax({
+                                url: url,
+                                data: {
+                                    'programming': programmingId
+                                },
+                                success: function(data) {
+                                    $("#courses").html(data);
+                                    //console.log(data);
+                                },
+                                error:function(data){
+                                    console.log(data);
+                                }
+                            });
+                        });
+                    });
+                </script>
+       {%endblock%}

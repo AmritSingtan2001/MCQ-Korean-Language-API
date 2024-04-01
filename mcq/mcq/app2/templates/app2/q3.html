@@ -1,0 +1,194 @@
+
+
+{% extends 'app2/base.html' %}
+{% load static %}
+{% block title %} 
+{% if instance %}Edit QuestionSets{% else %}Edit QuestionSets{% endif %}
+{% endblock %}
+{% block body %}
+
+<title>{% if instance %}Edit QuestionSets{% else %}Edit QuestionSets{% endif %}
+</title>
+
+
+            <!-- ============================================================== -->
+            <!-- Start Page Content here -->
+            <!-- ============================================================== -->
+
+            <div class="content-page">
+                <div class="content">
+
+                    <!-- Start Content-->
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box">
+                                    <h4 class="page-title">{% if instance %}Edit QuestionSets{% else %}Add QuestionSets{% endif %}
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+                      
+                        <form action="{% url 'dashboard:add_question' %}" method="post"  enctype="multipart/form-data" >
+                            {% csrf_token %}
+
+                            <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="id_categorie" class="form-label">Category</label>
+                            {{ form.categorie }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_set_name"  class="form-label">Set Name</label>
+                            {{ form.set_name }}
+                        </div>
+                    </div>
+              
+                            {% comment %} <div class="mb-3">
+                                <label for="{{ form.categorie.id_for_label }}" class="form-label">Main category </label>
+                                <select id="add_question" name="categorie" style="width: 100%;">
+                                    {% for categorie in main_categories %}
+                                      <option value="{{ categorie.id }}" {% if categorie.id == form.initial.categorie.id %}selected{% endif %}>{{ categorie.categories_name }}</option>
+                                    {% endfor %} 
+                                  </select>
+                                
+                            </div>
+                             {% endcomment %}
+                            
+                            {% comment %} <div class="mb-3">
+                                <label  for="" class="form-label" required>Sub Category </label><br>
+                                <select class="form-control"  id="courses" name="subcategory">
+                                    <option value="" selected disabled>----Select Sub category----</option>
+                                    <option value=""> </option>
+                                    
+                                </select>                                                       
+                            </div>
+             {% endcomment %}
+
+
+                            <div class="mb-3">
+                                <label for="{{ form.question.id_for_label }}" class="form-label">question </label>
+                                <input type="text" name="question" id="{{ form.question.id_for_label }}" class="form-control" 
+                                       value="{% if instance %}{{ instance.question }}{% endif %}" placeholder="Enter question">
+                            </div>
+        
+                            <div class="mb-3 mt-3 mt-xl-0 " >
+                                <label for="{{ form.image.id_for_label }}" class="form-label">Image:</label>
+                                <input type="file" name="{{ form.image.name }}" id="{{ form.image.id_for_label }}" class=" img-fluid form-control custom-class" {% if not instance %}{% endif %} onchange="showPreview(this);">
+                                <div id="imageContainer" style="width:auto">
+                                    <img id="imagePreview" class="img-fluid" src="{% if instance %}{{ instance.image.url }}{% endif %}" alt="">
+                                </div>
+                            </div>
+                            
+
+
+
+
+
+
+
+               
+                        </form>
+      
+
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                var addAnotherFieldButton = document.getElementById("addAnotherField");
+                                var additionalFields = document.querySelector('.additional-fields');
+                                var fieldCounter = 1; // Counter to create unique field IDs
+                                addAnotherFieldButton.addEventListener("click", function() {
+                                    var newFields = `
+                                        <div class="row">
+                                      
+               
+                                            <div class="col-md-4">
+                                                <div class="mb-3">
+                                                    <label for="question-${fieldCounter}" class="form-label">Question <span class="text-danger">*</span></label><br>
+                                                    <input class="form-control" id="question-${fieldCounter}" name="question_${fieldCounter}" type="text"  placeholder="Enter Quantity" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="mb-3">
+                                                    <label for="image-${fieldCounter}" class="form-label">Image <span class="text-danger">*</span></label><br>
+                                                    <input type="file"  id="image-${fieldCounter}" name="image_${fieldCounter}" class=" img-fluid form-control ">
+        
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <div class="mb-3">
+                                                    <label for="answer-${fieldCounter}" class="form-label">Answer <span class="text-danger">*</span></label><br>
+                                                    <input class="form-control" id="answer-${fieldCounter}" name="answer_${fieldCounter}" type="text"  placeholder="Enter Quantity" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="mb-3">
+                                                    <label for="image-${fieldCounter}" class="form-label">Image <span class="text-danger">*</span></label><br>
+                                                    <input type="file"  id="image-${fieldCounter}" name="image_${fieldCounter}" class=" img-fluid form-control ">
+        
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="mb-3">
+                                                    <label for="is_correct-${fieldCounter}" class="form-label">Is_correct <span class="text-danger">*</span></label><br>
+                                                    <input type="radio" id="is_correct-${fieldCounter}" name="is_correct_${fieldCounter}"  >
+        
+                                                </div>
+        
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="mb-5">
+        
+                                                <button type="button" class="btn btn-danger removeField">Remove</button>
+                                                </div>
+                                            </div>
+                                         
+                                             
+                                        </div>
+                                    `;
+                                    additionalFields.insertAdjacentHTML('beforeend', newFields);
+                                    fieldCounter++; // Increment counter for the next set of fields
+                                    var removeButtons = document.querySelectorAll('.removeField');
+                                    removeButtons.forEach(function(btn) {
+                                        btn.addEventListener('click', function(e) {
+                                            e.target.closest('.row').remove();
+                                        });
+                                    });
+                                });
+                            });
+                        </script>
+                        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.7.2/dist/js/bootstrap.bundle.min.js"></script>
+                        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+                        
+                        <script>
+                            $(document).ready(function() {
+                                // Set up event listener for the change in the category dropdown
+                                $('#id_categorie').change(function() {
+                                    var categoryId = $(this).val();
+                                    // Make an AJAX request to get question sets for the selected category
+                                    $.ajax({
+                                        url: '/get_question_sets/',  // Replace with the URL to your view
+                                        data: {'category_id': categoryId},
+                                        dataType: 'json',
+                                        success: function(data) {
+                                            // Update the options in the question set dropdown
+                                            var questionSetDropdown = $('#id_set_name');
+                                            questionSetDropdown.empty();
+                                            $.each(data, function(key, value) {
+                                                questionSetDropdown.append($('<option></option>').attr('value', value.id).text(value.set_name));
+                                            });
+                                        }
+                                    });
+                                });
+                            });
+                        </script>
+                    </div> <!-- container -->
+
+                </div> <!-- content -->
+             <!-- Add these scripts in your HTML template -->
+
+
+
+       {%endblock%}

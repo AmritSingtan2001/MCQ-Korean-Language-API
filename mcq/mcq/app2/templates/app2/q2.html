@@ -1,0 +1,229 @@
+
+
+{% extends 'app2/base.html' %}
+{% load static %}
+{% block title %} 
+{% if instance %}Edit QuestionSets{% else %}Edit QuestionSets{% endif %}
+{% endblock %}
+{% block body %}
+
+<title>{% if instance %}Edit QuestionSets{% else %}Edit QuestionSets{% endif %}
+</title>
+
+            <!-- ============================================================== -->
+            <!-- Start Page Content here -->
+            <!-- ============================================================== -->
+
+            <div class="content-page">
+                <div class="content">
+
+                    <!-- Start Content-->
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box">
+                                    <h4 class="page-title">{% if instance %}Edit QuestionSets{% else %}Add QuestionSets{% endif %}
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+                      
+                        <form id="dynamicForm" action="{% url 'dashboard:add_question' %}" method="post" data-courses-url="{% url 'dashboard:ajax_load_courses' %}" >
+                        {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="{{ question_form.set_name.id_for_label }}" class="form-label" required>Set Name </label><br>
+                                {{ question_form.set_name }}
+                            </div>
+                            {% comment %} <div class="mb-3">
+                                <label for="{{ form.categorie.id_for_label }}" class="form-label">Main category </label>
+                                <select id="add_question" name="categorie" style="width: 100%;">
+                                    {% for categorie in main_categories %}
+                                      <option value="{{ categorie.id }}" {% if categorie.id == form.initial.categorie.id %}selected{% endif %}>{{ categorie.categories_name }}</option>
+                                    {% endfor %} 
+                                  </select>
+                                
+                            </div>
+                             {% endcomment %}
+                            
+                            {% comment %} <div class="mb-3">
+                                <label  for="" class="form-label" required>Sub Category </label><br>
+                                <select class="form-control"  id="courses" name="subcategory">
+                                    <option value="" selected disabled>----Select Sub category----</option>
+                                    <option value=""> </option>
+                                    
+                                </select>                                                       
+                            </div>
+             {% endcomment %}
+
+
+                            <div class="mb-3">
+                                <label for="{{ form.question.id_for_label }}" class="form-label">question </label>
+                                <input type="text" name="question" id="{{ form.question.id_for_label }}" class="form-control" 
+                                       value="{% if instance %}{{ instance.question }}{% endif %}" placeholder="Enter question">
+                            </div>
+        
+                            <div class="mb-3 mt-3 mt-xl-0 " >
+                                <label for="{{ form.image.id_for_label }}" class="form-label">Image:</label>
+                                <input type="file" name="{{ form.image.name }}" id="{{ form.image.id_for_label }}" class=" img-fluid form-control custom-class" {% if not instance %}{% endif %} onchange="showPreview(this);">
+                                <div id="imageContainer" style="width:auto">
+                                    <img id="imagePreview" class="img-fluid" src="{% if instance %}{{ instance.image.url }}{% endif %}" alt="">
+                                </div>
+                            </div>
+                            
+                        </div> <!-- end col-->
+
+
+                            <div id="inputContainer">
+                                <!-- Dynamic input fields will be added here -->
+                            </div>
+                            <br>
+                        <div class="d-flex">
+                            <button type="button" onclick="addInput()" class="form-control">Add Answer</button>
+                            <button type="button" onclick="removeInput()"class="form-control">Remove Last Answer Field</button>
+                            <button type="submit" class="form-control">Submit</button>
+                        </div>
+                        </form>
+
+
+                    </div> <!-- container -->
+
+                </div> <!-- content -->
+             
+
+                <script>
+                    let counter = 0;
+                    const maxFields = 4;
+                    const defaultFields = 2;
+                  
+                    // Add default fields
+                    for (let i = 0; i < defaultFields; i++) {
+                        addInput();
+                    }
+                  
+                    function addInput() {
+                        if (counter < maxFields) {
+                            counter++;
+                            const inputContainer = document.getElementById('inputContainer');
+                  
+                            const inputGroup = document.createElement('div');
+                            inputGroup.classList.add('input-group', 'pt-3', 'required');
+                  
+                            const inputField = document.createElement('input');
+                            inputField.type = 'text';
+                            inputField.name = `answers_${counter}`;
+                            inputField.placeholder = `Answer ${counter}`;
+                            inputField.classList.add('form-control');
+                  
+                            const imageField = document.createElement('input');
+                            imageField.type = 'file';
+                            imageField.name = `imageField_${counter}`;
+                            imageField.accept = 'image/*';
+                            imageField.classList.add('form-control');
+                  
+                            const radioGroup = document.createElement('div');
+                            radioGroup.classList.add('form-check');
+                  
+                            const radioLabel = document.createElement('label');
+                            radioLabel.classList.add('form-check-label');
+                  
+                            const radioInput = document.createElement('input');
+                            radioInput.type = 'radio';
+                            radioInput.name = 'radioGroup';
+                            radioInput.value = `radioOption_${counter}`;
+                            radioInput.classList.add('form-check-input');
+                  
+                            radioLabel.appendChild(radioInput);
+                            radioLabel.appendChild(document.createTextNode('Select Correct Answer'));
+                  
+                            radioGroup.appendChild(radioLabel);
+                  
+                            inputGroup.appendChild(inputField);
+                            inputGroup.appendChild(imageField);
+                            inputGroup.appendChild(radioGroup);
+                  
+                            inputContainer.appendChild(inputGroup);
+                        } else {
+                            alert('Maximum 4 fields reached!');
+                        }
+                    }
+                  
+                    function removeInput() {
+                        const inputContainer = document.getElementById('inputContainer');
+                        const inputGroups = inputContainer.getElementsByClassName('input-group');
+                  
+                        if (inputGroups.length > defaultFields) {
+                            inputContainer.removeChild(inputGroups[inputGroups.length - 1]);
+                            counter--;
+                        }
+                    }
+                
+                    /*function sendData() {
+                        const dynamicData = [];
+                
+                        for (let i = 1; i <= counter; i++) {
+                            const answerField = $(`input[name="answers_${i}"]`).val();
+                            const imageField = $(`input[name="imageField_${i}"]`)[0].files[0];
+                            const isCorrect = $(`input[name="radioOption_${i}"]:checked`).val() === `radioOption_${i}`;
+                
+                            dynamicData.push({ answer: answerField, image: imageField, isCorrect: isCorrect });
+                            console.log(`Answer ${i}:`, answerField);
+                            console.log(`Image ${i}:`, imageField);
+                            console.log(`Is Correct ${i}:`, isCorrect);
+                        }
+                        
+
+                        console.log(dynamicData)
+                        // Additional data from your form
+                        const set_name = $('#id_set_name').val();
+                        const question = $('#id_question').val();
+                        const image = $('#id_image')[0].files[0];
+                
+                        // Send data to Django view using AJAX
+                      $.ajax({
+                            type: 'POST',
+                            url: '{% url "dashboard:add_question" %}', 
+                            data: {
+                                csrfmiddlewaretoken: '{{ csrf_token }}',
+                                set_name: set_name,
+                                question: question,
+                                image: image,
+                                dynamic_data: JSON.stringify(dynamicData)
+                            },
+                            success: function (response) {
+                                console.log(response);
+                            },
+                            error: function (error) {
+                                console.error(error);
+                            }
+                        });
+                    }*/
+                </script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+
+                <script>
+                    $(document).ready(function() {
+                        $("#category").change(function() {
+                            var url = $("#form").attr("data-courses-url");
+                            var programmingId = $(this).val();
+                            console.log(programmingId);
+                            $.ajax({
+                                url: url,
+                                data: {
+                                    'programming': programmingId
+                                },
+                                success: function(data) {
+                                    $("#courses").html(data);
+                                    //console.log(data);
+                                },
+                                error:function(data){
+                                    console.log(data);
+                                }
+                            });
+                        });
+                    });
+                </script>
+                  
+       {%endblock%}

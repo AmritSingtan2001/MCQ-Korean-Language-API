@@ -1,0 +1,174 @@
+
+{% extends 'app2/base.html' %}
+{% load static %}
+{% block title %} 
+Package
+{% endblock %}
+{% block body %}
+<title>Package</title>
+
+            <!-- ============================================================== -->
+            <!-- Start Page Content here -->
+            <!-- ============================================================== -->
+
+            <div class="content-page">
+                <div class="content">
+
+                    <!-- Start Content-->
+                    <div class="container-fluid">
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box">
+                                    <h4 class="page-title">Package</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+                        {% comment %} {% if messages %}
+                            {% for msg in messages %}
+                                <div class="alert alert-{{ msg.tags }} alert-dismissible text-bg-{{ msg.tags }} border-0 fade show" role="alert">
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    <strong>{% if msg.tags == 'success' %}Success{% elif msg.tags == 'warning' %}Warning{% endif %} - </strong>{{ msg.message }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                      {% endcomment %}
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row mb-2">
+                                         <div class="col-sm-5">
+                                                <a href="{% url 'dashboard:add_Categories'%}" class="btn btn-danger mb-2"><i class="mdi mdi-plus-circle me-2"></i> Add Package</a>
+                                            </div> 
+                                        </div>
+
+                                        {% comment %} {% if messages %}
+                                            {% for msg in messages %}
+                                                <div class="alert alert-{{ msg.tags }} alert-dismissible text-bg-{{ msg.tags }} border-0 fade show" role="alert">
+                                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                    <strong>{% if msg.tags == 'success' %}Success{% elif msg.tags == 'warning' %}Warning{% endif %} - </strong>{{ msg.message }}
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
+                                        {% endcomment %}
+
+
+                                    <div class="row">
+                                        {% for sets in  details%}
+                                        <div class="col-md-4 col-xxl-3">
+                                            <!-- project card -->
+                                            <div class="card d-block">
+                                                
+                                                <div class="card-body position-relative">
+                                                    <!-- project title-->
+                                                    <h4 class="mt-0">
+                                                        <a href="{% url 'dashboard:edit_Collection' sets.id %}"  class="text-title">{{sets.categories_name}}</a>
+                                                    </h4>
+                                                 
+                                                    <!-- project detail-->
+                                                    <p class="mb-1">
+                                                        <span class="pe-2 text-nowrap">
+                                                            {% comment %} <i class="mdi mdi-format-list-bulleted-type"></i> {% endcomment %}
+                                                            <b>{{sets.question_sets.all.count}}</b> Sets
+                                                        </span>  
+                                                    </p>
+                                                     <div class=" ">
+                                                       <img src="{{sets.image.url}}" style="height: 50px; width: 50px;"> </img>
+                                                    </div> 
+                                                
+                                                    
+                                                    <div class="col-auto mt-3 justify-content-center">
+                                                          <a href="{% url 'dashboard:add_Categories' %}" class="add btn btn-success" title="Add">Add Package</a>
+                                                          <a href="{% url 'dashboard:edit_Categories' sets.id %}" class="add btn btn-info" title="Edit">Edit </a>
+                                                          {% comment %} <a href="#QuestionSetsDeleteModel{{sets.id}}" class="delete btn btn-danger" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete"></i>Delete</a> {% endcomment %}
+
+                                                        </div>
+                                                </div> <!-- end card-body-->
+                                            </div> <!-- end card-->
+                                        </div> <!-- end col -->
+                
+                                        {% endfor %}
+                                        <nav>
+                                            <ul class="pagination pagination-rounded mb-0">
+                                                {% if details.has_previous %}
+                                                    <li class="page-item"><a href="?page=1" class="page-link">First</a></li>
+                                                    <li class="page-item"><a href="?page={{ details.previous_page_number }}" class="page-link">Previous</a></li>
+                                                {% endif %}
+    
+                                                {% for num in details.paginator.page_range %}
+                                                    {% if details.number == num %}
+                                                        <li class="page-item active"><a href="?page={{ num }}" class="page-link">{{ num }}</a></li>
+                                                    {% else %}
+                                                        <li class="page-item"><a href="?page={{ num }}" class="page-link">{{ num }}</a></li>
+                                                    {% endif %}
+                                                {% endfor %}
+    
+                                                {% if details.has_next %}
+                                                    <li class="page-item"><a href="?page={{ details.next_page_number }}" class="page-link">Next</a></li>
+                                                    <li class="page-item"><a href="?page={{ details.paginator.num_pages }}" class="page-link">Last</a></li>
+                                                {% endif %}
+                                            </ul>
+                                        </nav> 
+                                    </div>
+                
+                                    </div> <!-- end card-body-->
+                                </div> <!-- end card-->
+                            </div> <!-- end col -->
+                            
+                        </div>
+                        <!-- end row -->
+                        
+                    </div> <!-- container -->
+                
+
+                </div> <!-- content -->
+                	<!-- Delete Modal HTML -->
+
+
+                    {% comment %} {% block content %}
+                    {% for item in details %}
+                        <div class="modal fade"  id="QuestionSetsDeleteModel{{ item.id }}"  tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content custom-modal">
+                                        <div class="modal-footer">
+                                            Are you sure you want to delete this QuestionSets Id Number #{{ item.id }}
+                                          
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                            <form method="post" action="{% url 'dashboard:delete_question_set' item.id %}">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                        
+                                                </div>
+                                    {% endfor %}
+                                    <style>
+                                    /* static/css/custom.css */
+                
+                                    .custom-modal {
+                                        background-color: white; /* Set the background color to white */
+                                    }
+                                    </style>
+                                    <!-- Include your other CSS files -->
+                                    <link rel="stylesheet" type="text/css" href="{% static 'css/custom.css' %}">
+                
+                                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                                    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+                
+                                    <script>
+                                        $(document).ready(function () {
+                                            $('#QuestionSetsdeleteModal').modal('show');
+                                        });
+                                    </script>
+                                    {% endblock %}
+                                             {% endcomment %}
+                              
+                
+                {%endblock%}
+                  

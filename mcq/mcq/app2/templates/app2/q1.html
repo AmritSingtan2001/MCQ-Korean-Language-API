@@ -1,0 +1,143 @@
+
+
+{% extends 'app2/base.html' %}
+{% load static %}
+{% block title %} 
+{% if instance %}Edit QuestionSets{% else %}Edit QuestionSets{% endif %}
+{% endblock %}
+{% block body %}
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.add-answer-btn').click(function () {
+            var form_idx = $('#id_answers-TOTAL_FORMS').val();
+            var new_form = $('#empty-answer-form').html().replace(/__prefix__/g, form_idx);
+            $('#answer-formset').append(new_form);
+            $('#id_answers-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+        });
+    });
+</script>
+<title>{% if instance %}Edit QuestionSets{% else %}Edit QuestionSets{% endif %}
+</title>
+
+            <!-- ============================================================== -->
+            <!-- Start Page Content here -->
+            <!-- ============================================================== -->
+
+            <div class="content-page">
+                <div class="content">
+
+                    <!-- Start Content-->
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box">
+                                    <h4 class="page-title">{% if instance %}Edit QuestionSets{% else %}Add QuestionSets{% endif %}
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+                      
+                        <form method="post" enctype="multipart/form-data" action="{% url 'dashboard:add_question' %}">
+                            {% csrf_token %}
+                            {{form.media}}
+
+                                {% if messages %}
+                                {% for msg in messages %}
+                                    <div class="alert alert-{{ msg.tags }} alert-dismissible text-bg-{{ msg.tags }} border-0 fade show" role="alert">
+                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        <strong>{% if msg.tags == 'success' %}Success{% elif msg.tags == 'warning' %}Warning{% endif %} - </strong>{{ msg.message }}
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+
+                                        <div class="row">
+                                            <div class="col-xl-6">
+                                                <div class="mb-3">
+                                                    <label for="{{ question_form.set_name.id_for_label }}" class="form-label" required>Set Name </label><br>
+                                                    {{ question_form.set_name }}
+                                                </div>
+                                                
+                                                
+                                
+
+
+                                                <div class="mb-3">
+                                                    <label for="{{ form.question.id_for_label }}" class="form-label">question </label>
+                                                    <input type="text" name="{{ form.question.name }}" id="{{ form.question.id_for_label }}" class="form-control" 
+                                                           value="{% if instance %}{{ instance.question }}{% endif %}" placeholder="Enter question">
+                                                </div>
+                            
+                                                <div class="mb-3 mt-3 mt-xl-0 " >
+                                                    <label for="{{ form.image.id_for_label }}" class="form-label">Image:</label>
+                                                    <input type="file" name="{{ form.image.name }}" id="{{ form.image.id_for_label }}" class=" img-fluid form-control custom-class" {% if not instance %}{% endif %} onchange="showPreview(this);">
+                                                    <div id="imageContainer" style="width:auto">
+                                                        <img id="imagePreview" class="img-fluid" src="{% if instance %}{{ instance.image.url }}{% endif %}" alt="">
+                                                    </div>
+                                                </div>
+                                                
+                                             <br><br>
+                                            </div> <!-- end col-->
+
+                                           
+                                            </div> <!-- end col-->
+                                            <h2>Answers</h2>
+                                            <div id="answer-formset">
+                                                {{ answer_formset.management_form }}
+                                                {% for form in answer_formset.forms %}
+                                                    {{ form.as_p }}
+                                                {% endfor %}
+                                            </div>
+                                            <button type="button" class="add-answer-btn">Add Answer</button>
+                        
+                                            <input type="submit" value="Save">
+                                        </div>
+                                        <!-- end row -->
+
+                                </div> <!-- end card-->
+                            </div> <!-- end col-->
+                        </div>
+                        <!-- end row-->
+                    </form>
+
+
+                <div id="empty-answer-form" style="display: none;">
+                    {{ answer_formset.empty_form.as_p }}
+                </div>
+
+                    </div> <!-- container -->
+
+                </div> <!-- content -->
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+
+                <script>
+                    $(document).ready(function() {
+                        $("#category").change(function() {
+                            var url = $("#form").attr("data-courses-url");
+                            var programmingId = $(this).val();
+                            console.log(programmingId);
+                            $.ajax({
+                                url: url,
+                                data: {
+                                    'programming': programmingId
+                                },
+                                success: function(data) {
+                                    $("#courses").html(data);
+                                    //console.log(data);
+                                },
+                                error:function(data){
+                                    console.log(data);
+                                }
+                            });
+                        });
+                    });
+                </script>
+       {%endblock%}

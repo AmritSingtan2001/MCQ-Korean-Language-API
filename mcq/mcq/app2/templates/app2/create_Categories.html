@@ -1,0 +1,187 @@
+
+
+{% extends 'app2/base.html' %}
+{% load static %}
+{% block title %} 
+{% if instance %}Edit Category{% else %}Edit Category{% endif %}
+{% endblock %}
+{% block body %}
+<title>{% if instance %}Edit Category{% else %}Edit Category{% endif %}
+</title>
+
+            <!-- ============================================================== -->
+            <!-- Start Page Content here -->
+            <!-- ============================================================== -->
+
+            <div class="content-page">
+                <div class="content">
+
+                    <!-- Start Content-->
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box">
+                                    <h4 class="page-title">{% if instance %}Edit Category{% else %}Add Category{% endif %}
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+                      
+                        <form method="post" enctype="multipart/form-data" action="{% if instance %}{% url 'dashboard:edit_Categories'  instance.id %}{% else %}{% url 'dashboard:add_Categories' %}{% endif %}">
+                            {% csrf_token %}
+                            {{form.media}}
+                                {% if messages %}
+                                {% for msg in messages %}
+                                    <div class="alert alert-{{ msg.tags }} alert-dismissible text-bg-{{ msg.tags }} border-0 fade show" role="alert">
+                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        <strong>{% if msg.tags == 'success' %}Success{% elif msg.tags == 'warning' %}Warning{% endif %} - </strong>{{ msg.message }}
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+
+                                        <div class="row">
+                                            <div class="col-xl-6">
+                                                
+                                                <div class="mb-3">
+                                                    <label for="{{ form.order_number.id_for_label }}" class="form-label">Order Number </label>
+                                                    <input type="number" name="{{ form.order_number.name }}" id="{{ form.order_number.id_for_label }}" class="form-control" 
+                                                           value="{% if instance %}{{ instance.order_number }}{% endif %}" placeholder="Enter order_number" required>
+                                                </div>
+                            
+                                                
+                                                
+                                                <div class="mb-3 mt-3 mt-xl-0">
+                                                    <label for="{{ form.categories_name.id_for_label }}" class="form-label">Categories Name :</label>
+                                                    <input type="text" name="{{ form.categories_name.name }}"  value="{% if instance %}{{ instance.categories_name }}{% endif %}"  id="{{ form.categories_name.id_for_label }}" class="form-control custom-class" required>
+                                                 
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="{{ form.previous_price.id_for_label }}" class="form-label">Previous Price </label>
+                                                    <input type="number" name="{{ form.previous_price.name }}" id="{{ form.previous_price.id_for_label }}" class="form-control" 
+                                                           value="{% if instance %}{{ instance.previous_price }}{% endif %}" placeholder="Enter previous_price">
+                                                </div>
+                            
+    
+                                                <div class="mb-3">
+                                                    <label for="{{ form.current_price.id_for_label }}" class="form-label">Current Price </label>
+                                                    <input type="number" name="{{ form.current_price.name }}" id="{{ form.current_price.id_for_label }}" class="form-control" 
+                                                           value="{% if instance %}{{ instance.current_price }}{% endif %}" placeholder="Enter current_price"required>
+                                                </div>
+    
+                                            </div>
+                                                <div class="col-xl-6">
+                                                    <div class="mb-3">
+                                                        <label for="{{ form.short_descriptions.id_for_label }}" class="form-label">Short Descriptions </label>
+                                                        {{form.short_descriptions}}
+                                                    </div>
+                                                    
+                                         
+                                                    <div class="mb-3 mt-3 mt-xl-0 " >
+                                                        <label for="{{ form.image.id_for_label }}" class="form-label">Image:</label>
+                                                        <input type="file" name="{{ form.image.name }}" id="{{ form.image.id_for_label }}" class=" img-fluid form-control custom-class" {% if not instance %}required{% endif %} onchange="showPreview(this);">
+                                                        <div id="imageContainer" style="width:auto">
+                                                            <img id="imagePreview" class="img-fluid" src="{% if instance %}{{ instance.image.url }}{% endif %}" alt="">
+                                                        </div>
+                                                    </div>
+                                        
+                     
+                                           
+                                            </div> <!-- end col-->
+                                            
+                                            <div class="col-auto">
+                                            {% if instance %}
+                                                <button type="submit" class="btn btn-danger chat-send waves-effect waves-light">Update</button>
+                                            {% else %}
+                                                <button type="submit" class="btn btn-danger chat-send waves-effect waves-light">Add</button>
+                                            {% endif %}
+                                            </div>
+                                        </div>
+
+
+                                        <!-- related sets -->
+
+                                        <!-- end row -->
+
+                                </div> <!-- end card-->
+                            </div> <!-- end col-->
+                        </div>
+                        <!-- end row-->
+                    </form>
+
+                    
+                    </div> <!-- container -->
+                    <div class="row">
+                        {% for sets in  related_sets%}
+                        <div class="col-md-3 col-xxl-3">
+                            <!-- project card -->
+                            <div class="card d-block">
+                                <!-- project-thumbnail -->
+                                {% comment %} <img class="card-img-top" src="{{sets.question_sets.image.url}}" alt="project image cap"> {% endcomment %}
+                               
+                                <div class="card-body position-relative">
+                                    <!-- project title-->
+                                    <h4 class="mt-0">
+                                        <a href="{% url 'dashboard:add_question' %}" class="text-title">{{sets.set_name}}</a>
+                                    </h4>
+                                        <div class="badge text-bg-secondary p-1">
+                                            {% if sets.is_free == True %}
+                                                Free
+                                            {% else %}
+                                                Not Free
+                                            {% endif %}
+                                        </div>
+                                    
+                                    <!-- project detail-->
+                                    <p class="mb-3">
+                                        <span class="pe-2 text-nowrap">
+                                            {% comment %} <i class="mdi mdi-format-list-bulleted-type"></i> {% endcomment %}
+                                            <b>{{sets.question_set_name.all.count}}</b> Questions
+                                        </span>
+                                        
+                                    </p>
+                                    
+                                    <div class="col-auto mt-3">
+                                            <button type="submit" class="btn btn-danger chat-send waves-effect waves-light">Add</button>
+                                        </div>
+                                </div> <!-- end card-body-->
+                            </div> <!-- end card-->
+                        </div> <!-- end col -->
+
+                        {% endfor %}
+                    </div>
+                </div> <!-- content -->
+
+                
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+
+                <script>
+                    $(document).ready(function() {
+                        $("#category").change(function() {
+                            var url = $("#form").attr("data-courses-url");
+                            var programmingId = $(this).val();
+                            console.log(programmingId);
+                            $.ajax({
+                                url: url,
+                                data: {
+                                    'programming': programmingId
+                                },
+                                success: function(data) {
+                                    $("#courses").html(data);
+                                    //console.log(data);
+                                },
+                                error:function(data){
+                                    console.log(data);
+                                }
+                            });
+                        });
+                    });
+                </script>
+       {%endblock%}

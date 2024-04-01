@@ -1,0 +1,278 @@
+{% extends 'app2/base.html' %}
+{% load static %}
+{% block title %} 
+Dashboard
+{% endblock %}
+{% block body %}
+<div class="content-page">
+    <div class="content">
+
+        <!-- Start Content-->
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-xxl-12">
+                    <!-- start page title -->
+                    <div class="page-title-box">
+                        {% comment %} <div class="page-title-right">
+                            <form>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Search..." />
+                                    <button class="input-group-text btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false">
+                                        <i class='uil uil-sort-amount-down'></i>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-end">
+                                        <a class="dropdown-item" href="#">Due Date</a>
+                                        <a class="dropdown-item" href="#">Added Date</a>
+                                        <a class="dropdown-item" href="#">Assignee</a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div> {% endcomment %}
+                      
+                        <h4 class="page-title">Tasks  <a href="#" data-bs-toggle="modal" data-bs-target="#add-new-task-modal" class="btn btn-success btn-sm ms-3">Add New</a></h4>
+                    </div>
+                    <!-- end page title -->
+
+                    <!-- tasks panel -->
+                    <div class="mt-2">
+                        <div class="card mb-1">
+                        <h5 class="m-0 pb-2">
+                            <a class="text-dark" data-bs-toggle="collapse" href="#todayTasks" role="button" aria-expanded="false" aria-controls="todayTasks">
+                                <i class='uil uil-angle-down font-18'></i>Today <span class="text-muted"></span>
+                            </a>
+                        </h5>
+                </div>
+
+                        <div class="collapse show" id="todayTasks">
+                            <div class="card mb-0">
+                                <div class="card-body">
+                                    
+                                    <!-- task -->
+                                    <div class="row justify-content-sm-between">
+                                        <div class="col-sm-6 mb-2 mb-sm-0">
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="task1">
+                                                <label class="form-check-label" for="task1">
+                                                    Draft the new contract document for sales team
+                                                </label>
+                                            </div> <!-- end checkbox -->
+                                        </div> <!-- end col -->
+                                       
+                                    </div>
+                                    <!-- end task -->
+
+                                    <!-- task -->
+                                    <div class="row justify-content-sm-between mt-2">
+                                        <div class="col-sm-6 mb-2 mb-sm-0">
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="task2">
+                                                <label class="form-check-label" for="task2">
+                                                    iOS App home page
+                                                </label>
+                                            </div> <!-- end checkbox -->
+                                        </div> <!-- end col -->
+                                    
+                                    </div>
+                                    <!-- end task -->
+       <!-- task -->
+       <div class="row justify-content-sm-between mt-2">
+        <div class="col-sm-6 mb-2 mb-sm-0">
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="task2">
+                <label class="form-check-label" for="task2">
+                    iOS App home page
+                </label>
+            </div> <!-- end checkbox -->
+        </div> <!-- end col -->
+    
+    </div>
+    <!-- end task -->
+                                    <!-- task -->
+                                    <div class="row justify-content-sm-between mt-2">
+                                        <div class="col-sm-6 mb-2 mb-sm-0">
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="task3">
+                                                <label class="form-check-label" for="task3">
+                                                    Write a release note
+                                                </label>
+                                            </div> <!-- end checkbox -->
+                                        </div> <!-- end col -->
+                                 
+                                    </div>
+                                    <!-- end task -->
+                                </div> <!-- end card-body-->
+                            </div> <!-- end card -->
+                        </div> <!-- end .collapse-->
+                    </div> <!-- end .mt-2-->
+                    <div class="mt-2">
+                        <h5 class="m-0 pb-2">
+                            <a class="text-dark" data-bs-toggle="collapse" href="#todayTasks2" role="button" aria-expanded="false" aria-controls="todayTasks">
+                                <i class='uil uil-angle-down font-18'></i>Today <span class="text-muted"></span>
+                            </a>
+                        </h5>
+
+                        <div class="collapse show" id="todayTasks2">
+                            <div class="card mb-0">
+                                <div class="card-body">
+                                    <!-- task -->
+                                    <div class="row justify-content-sm-between">
+                                        <div class="col-sm-6 mb-2 mb-sm-0">
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="task1">
+                                                <label class="form-check-label" for="task1">
+                                                    Draft the new contract document for sales team
+                                                </label>
+                                            </div> <!-- end checkbox -->
+                                        </div> <!-- end col -->
+                                       
+                                    </div>
+                                    <!-- end task -->
+
+                                    <!-- task -->
+                                    <div class="row justify-content-sm-between mt-2">
+                                        <div class="col-sm-6 mb-2 mb-sm-0">
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="task2">
+                                                <label class="form-check-label" for="task2">
+                                                    iOS App home page
+                                                </label>
+                                            </div> <!-- end checkbox -->
+                                        </div> <!-- end col -->
+                                    
+                                    </div>
+                                    <!-- end task -->
+
+                                    <!-- task -->
+                                    <div class="row justify-content-sm-between mt-2">
+                                        <div class="col-sm-6 mb-2 mb-sm-0">
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="task3">
+                                                <label class="form-check-label" for="task3">
+                                                    Write a release note
+                                                </label>
+                                            </div> <!-- end checkbox -->
+                                        </div> <!-- end col -->
+                                 
+                                    </div>
+                                    <!-- end task -->
+                                </div> <!-- end card-body-->
+                            </div> <!-- end card -->
+                        </div> <!-- end .collapse-->
+                    </div> <!-- end .mt-2-->
+
+                    <div class="mt-2">
+                        <h5 class="m-0 pb-2">
+                            <a class="text-dark" data-bs-toggle="collapse" href="#todayTasks3" role="button" aria-expanded="false" aria-controls="todayTasks">
+                                <i class='uil uil-angle-down font-18'></i>Today <span class="text-muted"></span>
+                            </a>
+                        </h5>
+
+                        <div class="collapse show" id="todayTasks3">
+                            <div class="card mb-0">
+                                <div class="card-body">
+                                    <!-- task -->
+                                    <div class="row justify-content-sm-between">
+                                        <div class="col-sm-6 mb-2 mb-sm-0">
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="task1">
+                                                <label class="form-check-label" for="task1">
+                                                    Draft the new contract document for sales team
+                                                </label>
+                                            </div> <!-- end checkbox -->
+                                        </div> <!-- end col -->
+                                       
+                                    </div>
+                                    <!-- end task -->
+
+                                    <!-- task -->
+                                    <div class="row justify-content-sm-between mt-2">
+                                        <div class="col-sm-6 mb-2 mb-sm-0">
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="task2">
+                                                <label class="form-check-label" for="task2">
+                                                    iOS App home page
+                                                </label>
+                                            </div> <!-- end checkbox -->
+                                        </div> <!-- end col -->
+                                    
+                                    </div>
+                                    <!-- end task -->
+
+                                    <!-- task -->
+                                    <div class="row justify-content-sm-between mt-2">
+                                        <div class="col-sm-6 mb-2 mb-sm-0">
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="task3">
+                                                <label class="form-check-label" for="task3">
+                                                    Write a release note
+                                                </label>
+                                            </div> <!-- end checkbox -->
+                                        </div> <!-- end col -->
+                                 
+                                    </div>
+                                    <!-- end task -->
+                                </div> <!-- end card-body-->
+                            </div> <!-- end card -->
+                        </div> <!-- end .collapse-->
+                    </div> <!-- end .mt-2-->
+
+                
+                
+                </div> <!-- end col -->
+
+        
+            </div>
+            <!-- end row-->
+
+        </div> <!-- container -->
+
+    </div> <!-- content -->
+
+
+      <!--  Add new task modal -->
+      <div class="col-md-12">
+      <div class="modal fade task-modal-content" id="add-new-task-modal" tabindex="-1" role="dialog" aria-labelledby="NewTaskModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="NewTaskModalLabel">Create New Task</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form class="p-7">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label for="task-title" class="form-label">Title</label>
+                                    <input type="text" class="form-control form-control-light" id="task-title" placeholder="Enter title">
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="mb-3">
+                            <label for="task-description" class="form-label">Description</label>
+                            <textarea class="form-control form-control-light" id="task-description" rows="3"></textarea>
+                        </div>
+                    
+                        <!-- Add the checkbox input below -->
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="exampleCheck" />
+                            <label class="form-check-label" for="exampleCheck">Check me out</label>
+                        </div>
+                    
+                        <div class="text-end">
+                            <button type="button" class="btn btn-light" data-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-primary">Create</button>
+                        </div>
+                    </form>
+                    
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
+</div>
+{% endblock%}

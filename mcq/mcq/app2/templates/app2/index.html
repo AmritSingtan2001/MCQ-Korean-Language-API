@@ -1,0 +1,242 @@
+
+{% extends 'app2/base.html' %}
+{% load static %}
+{% block title %} 
+Dashboard
+{% endblock %}
+{% block body %}
+<style>
+    .scrollable-table {
+        max-height: 200px; 
+        overflow-y: auto;
+    }
+   
+</style>
+<link href="http://nepalidatepicker.sajanmaharjan.com.np/nepali.datepicker/css/nepali.datepicker.v4.0.1.min.css" rel="stylesheet" type="text/css"/>
+
+<title>dashboard</title>
+            <!-- ============================================================== -->
+            <!-- Start Page Content here -->
+            <!-- ============================================================== -->
+
+            <div class="content-page">
+                <div class="content">
+
+                    <!-- Start Content-->
+                    <div class="container-fluid">
+
+                        
+                        <div class="row justify-content-between mt-3">
+                            <div class="col-12">
+                               
+                                <div class="card widget-inline p-3">
+                                    <div class="card-body p-0">
+                                        <h4 class="fs-1 text-center"> Welcome To Dashboard</h4>
+                                        <div class="row mt-3">
+                                       
+                
+                                            
+                
+                                        </div> <!-- end row -->
+
+                                        
+                                    </div>
+
+                                   
+                                </div> <!-- end card-box-->
+                            </div> <!-- end col-->
+                        </div>
+                        <div class="row">
+                            <div class="col-12 ">
+                                <div class="card widget-inline">
+                                    
+                                    <div class="card-body">
+                                        <div class="row">
+                                            
+                                            <div class="col-md-3 ">
+                                                <div class="card p-3 bg-success text-white ">
+                                                    <a href="{% url 'dashboard:purchases'%}" style="color: white;"> <div class="d-flex">
+                                                        <i class="ri-price-tag-line fs-1"></i>
+                                                        <h4 class="ps-2 pt-2"> Paid Amount</h4>
+                                                    </div>
+                                                    <h4>Rs {{paidamount}}</h4>
+                                                </a>
+                                                    
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 ">
+                                                <div class="card p-3 bg-danger text-white ">
+                                                    <a href="{% url 'dashboard:questionSets'%}" style="color: white;"> <div class="d-flex">
+                                                        <i class="ri-price-tag-line fs-1"></i>
+                                                        <h4 class="ps-2 pt-2"> Total Question Sets</h4>
+                                                    </div>
+                                                    <h4> {{set}} Sets</h4></a>
+                                                </div>
+                                            </div>
+                
+                                            <div class="col-md-3 ">
+                                                <div class="card p-3 bg-warning text-white">
+                                                    <a href="{% url 'dashboard:user'%}" style="color: white;">   <div class="d-flex">
+                                                        <i class=" ri-team-line fs-1"></i>
+                                                        <h4 class="ps-2 pt-2">Total User</h4>
+                                                    </div>
+                                                    <h4>{{totalClient}} User</h4>
+                                                </a>
+                                                </div>
+                                            </div>
+                
+                                            <div class="col-md-3 ">
+                                               <a href="{% url 'dashboard:purchases'%}" style="color: white;"> <div class="card p-3 bg-info text-white">
+                                                    <div class="d-flex">
+                                                        <i class="ri-order-play-line fs-1"></i>
+                                                        <h4 class ="ps-2 pt-2" style="color: white;">Total Purchase</h4>
+                                                    </div>
+                                                   <h4 style="color: white;"> {{totalOrders}} Purchase</h4>
+                                                </a>
+                                            </div>
+
+                                            
+                                       </div>
+                                    </div>
+                                </div> <!-- end card-box-->
+                            </div> <!-- end col-->
+                        </div>
+
+                        {%if request.user.is_admin%}
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card widget-inline">
+                                    <div class="card-body p-0">
+                                        <div class="row g-0">
+                                            <div class="col-sm-6 col-lg-3">
+                                                <a href="{% url 'dashboard:categorie' %}">
+
+                                                <div class="card rounded-0 shadow-none m-0">
+                                                    <div class="card-body text-center">
+                                                        <i class="ri-briefcase-line text-muted font-24"></i>
+                                                        <h3><span> Category</span></h3>
+                                                        <p class="text-muted font-15 mb-0"></p>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            </div>
+                
+                                            <div class="col-sm-6 col-lg-3">
+                                                <a href="{% url 'dashboard:collection' %}">
+                                                <div class="card rounded-0 shadow-none m-0 border-start border-light">
+                                                    <div class="card-body text-center">
+                                                        <i class="ri-list-check-2 text-muted font-24"></i>
+                                                        <h3><span>Packages</span></h3>
+                                                        <p class="text-muted font-15 mb-0"></p>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            </div>
+                
+                                            <div class="col-sm-6 col-lg-3">
+                                                <a href="{% url 'dashboard:slider'%}">
+                                                <div class="card rounded-0 shadow-none m-0 border-start border-light">
+                                                    <div class="card-body text-center">
+                                                        <i class="ri-group-line text-muted font-24"></i>
+                                                        <h3><span>Slider</span></h3>
+                                                        
+                                                        <p class="text-muted font-15 mb-0"></p>
+                                                  
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            </div>
+                
+                                            <div class="col-sm-6 col-lg-3">
+                                                <a href="{% url 'dashboard:Group' %}">
+                                                <div class="card rounded-0 shadow-none m-0 border-start border-light">
+                                                    <div class="card-body text-center">
+                                                        <i class="ri-line-chart-line text-muted font-24"></i>
+                                                        <h3><span>Groups</span> <i class="mdi mdi-up text-success"></i></h3>
+                                                        <p class="text-muted font-15 mb-0"></p>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            </div>
+                
+                                        </div> <!-- end row -->
+                                    </div>
+                                </div> <!-- end card-box-->
+                            </div> <!-- end col-->
+                        </div>
+                        {%endif%}
+                        <!-- end row-->
+                        
+                        <body style="display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; font-family: Arial, sans-serif;">
+                           
+                        </body>
+                    
+                
+                        <!-- end row -->
+
+
+                    </div>
+                    <!-- container -->
+
+                </div>
+                <!-- content -->
+
+                <script src="http://nepalidatepicker.sajanmaharjan.com.np/nepali.datepicker/js/nepali.datepicker.v4.0.1.min.js" type="text/javascript"></script>
+
+                <script type="text/javascript">
+                    window.onload = function() {
+                        var startInput = document.getElementById("nepali-start-datepicker");
+                        startInput.nepaliDatePicker({
+                            dateFormat: "YYYY-MM-D (MMMM)"
+                        });
+                
+                        var endInput = document.getElementById("nepali-end-datepicker");
+                        endInput.nepaliDatePicker({
+                            dateFormat: "YYYY-MM-D (MMMM)"
+                        });
+                    };
+                </script>
+
+                
+
+                {% block content %}
+                {% for item in details %}
+                    <div class="modal fade"  id="MainCategorieDeleteModel{{ item.id }}"  tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content custom-modal">
+                                    <div class="modal-footer">
+                                        Are you sure you want to delete this #{{ item.id}}
+                                      
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                        <form method="post" action="{% url 'dashboard:deletePick_Up_Plan' item.id %}">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-danger">Delete</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                    
+                                            </div>
+                                {% endfor %}
+                                <style>
+                                /* static/css/custom.css */
+            
+                                .custom-modal {
+                                    background-color: white; /* Set the background color to white */
+                                }
+                                </style>
+                                <!-- Include your other CSS files -->
+                                <link rel="stylesheet" type="text/css" href="{% static 'css/custom.css' %}">
+            
+                                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                                <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+            
+                                <script>
+                                    $(document).ready(function () {
+                                        $('#MainCategoriedeleteModal').modal('show');
+                                    });
+                                </script>
+                                {% endblock %}
+             {%endblock%}

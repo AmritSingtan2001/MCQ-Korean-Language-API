@@ -49,14 +49,14 @@ Categories
                                                     <tr>
                                                      
                                                         <th >Id</th>
-                                                        <th >Categorie</th>
-                                                        <th>Previous Price</th>
-                                                        <th>Current Price</th>
-                                                        <th>Description</th>
+                                                        <th class="text-nowrap" >Categorie</th>
+                                                        <th class="text-nowrap">Previous Price</th>
+                                                        <th class="text-nowrap">Current Price</th>
+                                                        <th class="text-nowrap">Description</th>
                                                     
                                                         <th>Image</th>
 
-                                                        <th style="width: 120px;">Action</th>
+                                                        <th style="width: 100px;">Action</th>
                                                     </tr>
                                                                                                 
                                         {%for item in details%}
@@ -78,7 +78,7 @@ Categories
                                                 {{item.current_price}}
                                             </td>
                                             <td>
-                                                {{item.short_descriptions}}
+                                                {{item.short_descriptions|safe|truncatechars:20}}
                                             </td>
                                            
                                             <td>
@@ -94,6 +94,8 @@ Categories
                                                 <script src="script.js"></script>
                                             </td>
                                             <td>
+                                                <a href="{% url 'dashboard:edit_Collection' item.id %}" class="font-18 text-info" data-bs-toggle="tooltip" data-bs-placement="top" title="View Question Set"><i class="uil uil-eye"></i></a>
+
                                                 <a href="{% url 'dashboard:edit_Categories' item.id %}" class="font-18 text-info" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><i class="uil uil-pen"></i></a>
                                                
                                                 <a href="#CategoriesDeleteModel{{item.id}}" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>

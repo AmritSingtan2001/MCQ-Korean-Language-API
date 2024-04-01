@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-+3(*^q)f%%@m&l^z-lfy#g(-v_p8g&s2*38#w@whfb42&l5+ci
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['http://mcq.gastii.com','https://mcq.gastii.com','mcq.gastii.com']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -76,7 +76,6 @@ REST_FRAMEWORK = {
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',

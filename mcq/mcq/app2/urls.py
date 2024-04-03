@@ -49,6 +49,9 @@ urlpatterns = [
         path('update_purchase_list/<int:id>/', views.update_purchase_list, name='update_purchase_list'),
         path('deletepurchases/<int:id>/',views.deletepurchases,name='deletepurchases'),
 
+        #add multiple question
+        path('add/multiple/question/<int:setid>', views.multiple_question_add, name='multiple_question_add'),
+
         path('add_question', views.add_question, name='add_question'),
         path('add_question/<int:setid>', views.add_question, name='addquestion'),
         path('add_question/update/<int:question_id>', views.add_question, name='update_question'),
@@ -68,7 +71,12 @@ urlpatterns = [
         path('edit_question/<int:question_id>/', create_question, name='edit_question'),
         #testing
         path('test',views.add_question, name='test'),
-        path('user/', views.user, name='user'),
+        #student
+        path('student/', views.user, name='user'),
+        path('student/register',views.student_register, name='student_register'),
+        path('student/update/<int:student_id>',views.student_register, name='student_update'),
+        path('student/delete/<int:id>',views.delete_student, name='student_delete'),
+
         
         path('score/', views.score, name='Score'),
         path('Score-delete/<int:id>/', views.deleteScore, name="deleteScore"),

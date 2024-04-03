@@ -1,0 +1,168 @@
+
+
+{% extends 'app2/base.html' %}
+{% load static %}
+{% block title %} 
+{% if instance %}Edit Student{% else %} Register New Student{% endif %}
+{% endblock %}
+{% block body %}
+
+<style>
+    #togglePassword{
+        position: absolute;
+        left: 1000px;
+        top: 140px;
+    
+    }
+</style>
+
+
+            <!-- ============================================================== -->
+            <!-- Start Page Content here -->
+            <!-- ============================================================== -->
+
+            <div class="content-page">
+                <div class="content">
+
+                    <!-- Start Content-->
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box">
+                                    <h4 class="page-title">{% if instance %}Edit Student{% else %}Register New Student{% endif %}
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+                      
+                        <form method="post" enctype="multipart/form-data" action="{% if student_register_form.instance.pk %}{% url 'dashboard:student_update' student_register_form.instance.pk %}{% else %}{% url 'dashboard:student_register' %}{% endif %}">
+                            {% csrf_token %}
+                            {{form.media}}
+                                {% if messages %}
+                                {% for msg in messages %}
+                                    <div class="alert alert-{{ msg.tags }} alert-dismissible text-bg-{{ msg.tags }} border-0 fade show" role="alert">
+                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        <strong>{% if msg.tags == 'success' %}Success{% elif msg.tags == 'warning' %}Warning{% endif %} - </strong>{{ msg.message }}
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+
+
+                            
+                
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+
+                                        <div class="row">
+                                            {% for field in student_register_form %}
+                                            <div class="col-xl-6">
+                                                <div class="mb-2">
+                                                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                                    {{ field }}
+
+                                                    {% if field.name == 'password' %}:
+                                                    {% if student_register_form.instance.pk %}
+                                                    {% with student_register_form.instance.password as original_password %}
+                                                    <input type="hidden" name="original_password" value="{{ original_password }}">
+                                                    {% endwith %}
+                                                    <i class="mdi mdi-eye" class="btn " id="togglePassword"></i>
+                                                    {%endif %}
+                                                    {%endif %}
+                                                    {% if field.name == 'avatar' %}
+                                                    <div id="imageContainer" style="width:auto">
+                                                        <img id="imagePreview" class="img-fluid" src="{% if field.value %}{{ field.value.url }}{% endif %}" >
+                                                    </div>
+                                                    {% endif %}
+
+                                                    
+                                                </div>
+                                            </div>
+                                            {% endfor %}
+
+                                               
+                     
+                                           
+                                            </div> <!-- end col-->
+                                            
+                                            <div class="col-auto">
+                                            {% if student_register_form.instance.pk %}
+                                                <button type="submit" class="btn btn-danger chat-send waves-effect waves-light">Update Student</button>
+                                            {% else %}
+                                                <button type="submit" class="btn btn-danger chat-send waves-effect waves-light">Add New Student</button>
+                                            {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> <!-- end card-->
+                            </div> <!-- end col-->
+                        </div>
+                        <!-- end row-->
+                    </form>
+
+                    
+                    </div> <!-- container -->
+                    <div class="row">
+                        {% for sets in  related_sets%}
+                        <div class="col-md-3 col-xxl-3">
+                            <!-- project card -->
+                            <div class="card d-block">
+                                <!-- project-thumbnail -->
+                                {% comment %} <img class="card-img-top" src="{{sets.question_sets.image.url}}" alt="project image cap"> {% endcomment %}
+                               
+                                <div class="card-body position-relative">
+                                    <!-- project title-->
+                                    <h4 class="mt-0">
+                                        <a href="{% url 'dashboard:add_question' %}" class="text-title">{{sets.set_name}}</a>
+                                    </h4>
+                                        <div class="badge text-bg-secondary p-1">
+                                            {% if sets.is_free == True %}
+                                                Free
+                                            {% else %}
+                                                Not Free
+                                            {% endif %}
+                                        </div>
+                                    
+                                    <!-- project detail-->
+                                    <p class="mb-3">
+                                        <span class="pe-2 text-nowrap">
+                                            {% comment %} <i class="mdi mdi-format-list-bulleted-type"></i> {% endcomment %}
+                                            <b>{{sets.question_set_name.all.count}}</b> Questions
+                                        </span>
+                                        
+                                    </p>
+                                    
+                                    <div class="col-auto mt-3">
+                                            <button type="submit" class="btn btn-danger chat-send waves-effect waves-light">Add</button>
+                                        </div>
+                                </div> <!-- end card-body-->
+                            </div> <!-- end card-->
+                        </div> <!-- end col -->
+
+                        {% endfor %}
+                    </div>
+                </div> <!-- content -->
+
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const passwordField = document.getElementById('id_password');
+                        const toggleButton = document.getElementById('togglePassword');
+                        
+                        toggleButton.addEventListener('click', function() {
+                            if (passwordField.type === 'password') {
+                                passwordField.type = 'text';
+                            } else {
+                                passwordField.type = 'password';
+                            }
+                        });
+                    });
+                </script>
+                    
+                
+               
+       {%endblock%}

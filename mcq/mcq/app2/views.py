@@ -9,8 +9,6 @@ from . forms import *
 from app.models import *
 from django.contrib.auth.forms import PasswordChangeForm
 from django.core.paginator import Paginator
-# from . new_file_handler import validate_file
-# from django.http import JsonResponse
 from django.http import HttpResponseBadRequest
 
 
@@ -291,22 +289,19 @@ def add_edit_Collection(request, id=None):
     context = {'form': form, 'instance': instance, 'related_sets':related_sets}
     return render(request, 'app2/create_Collection.html', context)
 
-# def collection(request):
-#     questionSets=Categories.objects.all()
-#     p=Paginator(questionSets,12)
-#     page_number= request.GET.get('page')
-#     questionSets=p.get_page(page_number)
-#     return render(request, 'app2/Collection.html',{'details':questionSets})
 
 @login_required
 def deletequestionSets(request, id):
     record = get_object_or_404(QuestionSets, id=id)
 
     if request.method == 'POST':
+        category_id = request.POST.get('category_id')
         record.delete()
-        return redirect('dashboard:questionSets')  # Redirect to a list view after deletion
+        return redirect('dashboard:edit_Collection',id=category_id) 
+    else:
+        return redirect('dashboard:categorie')
 
-    return render(request, 'app2/questionSets.html', {'details': record})
+    
 
 
 def load_sub_category(request):
@@ -443,57 +438,42 @@ def add_question_set(request):
 from django.shortcuts import render, redirect
 from .forms import QuestionSetsForm, QuestionsForm, AnswerForm
 
-# @login_required
-# def add_question(request, setid=None):
-#     if request.method == "POST":
-#         main_form = QuestionsForm(request.POST, request.FILES)
-#         if main_form.is_valid():
-#             main_instance = main_form.save()
-            
-#             additional_fields = {}
-            
-#             for key, value in request.POST.items():
-#                 if key.startswith(('answer', 'answerfile', 'correct')):
-#                     field_type, *rest = key.split('_')
-#                     index = rest[0] if rest else '0'
-                    
-            
-#                     if field_type == 'correct' and value == 'on':
-#                         value = True
-#                     elif field_type == 'correct' and value != 'on':
-#                         value = False
-
-                        
-#                     additional_fields.setdefault(int(index), {})[field_type] = value
-
-
-#             for key, file in request.FILES.items():
-#                 if key.startswith('answerfile'):
-#                     field_type, *rest = key.split('_')
-#                     index = rest[0] if rest else '0'
-#                     additional_fields.setdefault(int(index), {})[field_type] = file
-
-            
-
-#             for index, fields in additional_fields.items():
-#                     print("aAA:", fields)
- 
-#                     fields['question'] = main_instance 
-#                     Answer.objects.create(**fields)
-            
-#             return redirect('dashboard:addquestion', main_instance.set_name.id)
-    
-#         else:
-#             return JsonResponse({'success': False, 'errors': main_form.errors}, status=400)
-#     else:
-#         main_form = QuestionsForm()
-#         answer_forms = AnswerForm()
-#         return render(request, 'app2/test.html', {'form': main_form, 'answer_forms': answer_forms, 'loop_times': range(4),'set_name':setid})
-    
-
-# from django.utils.encoding import smart_text
-# update and add question 
 from django.shortcuts import get_object_or_404
+
+
+'''add multiple question '''
+def multiple_question_add(request,setid=None):
+    questions_range=range(40)
+    loop_times =range(4)
+    if request.method == 'POST':
+        # Access form data
+        set_name = request.POST.get('set_name')
+        
+        # Access question data
+        for item in questions_range:
+            group = request.POST.get(f'group_{item}')
+            marks = request.POST.get(f'marks_{item}')
+            question = request.POST.get(f'question_{item}')
+            audio_file = request.FILES.get(f'audio_{item}')
+            image_file = request.FILES.get(f'image_{item}')
+            # Process your question data here
+
+            # Access answer data
+            for i in loop_times:
+                answer = request.POST.get(f'answer_{item}_{i}')
+                audio_answer_file = request.FILES.get(f'answer_audio_{item}_{i}')
+                image_answer_file = request.FILES.get(f'answer_image_{item}_{i}')
+                is_correct = request.POST.get(f'is_correct_{item}_{i}')
+                # Process your answer data here
+
+        # Process the data as needed
+        return HttpResponse("Form submitted successfully.")
+    else:
+        return render(request,'app2/multiple_question_add.html',{'loop_times':loop_times, 'set_name': setid, 'questions_range':questions_range})
+
+
+
+
 
 
 # thisis it
@@ -563,7 +543,7 @@ def add_question(request, setid=None, question_id=None):
         else:
             return JsonResponse({'success': False, 'errors':main_form.errors}, status=400)
 
-    return render(request, 'app2/test.html', {'form': main_form, 'answer_forms': answer_forms, 'loop_times': range(4), 'set_name': setid})
+    return render(request, 'app2/test.html', {'form': main_form, 'answer_forms': answer_forms, 'loop_times': range(4), 'set_name': setid, 'questions_range':range(40)})
 
 
 
@@ -582,10 +562,46 @@ def question_delete(request):
         return redirect("dashboard:question", instance.set_name.id)
 
 
+''' student list create update delete view'''
+@login_required
+def student_register(request, student_id=None):
+    if request.method == "POST":
+        if student_id:
+            student = get_object_or_404(User, pk=student_id)
+            student_register_form = StudentRegisterForm(request.POST, request.FILES, instance=student)
+        else:
+            student_register_form = StudentRegisterForm(request.POST, request.FILES)
+        
+        if student_register_form.is_valid():
+            student_register_form.save()
+            if student_id:
+                messages.success(request, "Student details updated successfully!")
+            else:
+                messages.success(request, "New student added successfully!")
+            return redirect('dashboard:student_update', student_id=student.id)
+        else:
+            messages.warning(request, student_register_form.errors)
+    else:
+        if student_id:
+            student = get_object_or_404(User, pk=student_id)
+            student_register_form = StudentRegisterForm(instance=student)
+        else:
+            student_register_form = StudentRegisterForm()
+    
+    return render(request, 'app2/student_register.html', {'student_register_form': student_register_form})
+
+@login_required
+def delete_student(request,id):
+    User.objects.get(id=id).delete()
+    messages.success(request,"Student deleted successfully !")
+    return redirect('dashboard:user')
+
+
+
 @login_required
 def user(request):
-    user = User.objects.filter(is_user=True)
-    return render(request, 'app2/user.html', {'user': user})
+    user = User.objects.exclude(is_admin=True).order_by('-created_at')
+    return render(request, 'app2/user.html', {'students': user})
 
 
 

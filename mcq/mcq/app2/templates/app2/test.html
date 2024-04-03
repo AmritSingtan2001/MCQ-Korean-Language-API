@@ -69,9 +69,7 @@
                                 <div class="card">
                                     <div class="card-body">
 
-
-                                    
-                                            <div class="row">
+                        <div class="row">
                             <input type="hidden" name="set_name" id="set_id" value="{{set_name}}">
                             <div class="col-md-6">
                                 <div class="mb-3">
@@ -83,7 +81,7 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="id_question" class="form-label">Marks</label><br>
-                                    {{ form.marks }}
+                                    <input type="nmber" name="{{form.marks.name}}" value="{{form.marks.value}}" class="form-control" disabled>
                                 </div>
                             </div>
                          

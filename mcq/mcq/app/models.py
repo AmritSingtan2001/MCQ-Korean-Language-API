@@ -82,7 +82,7 @@ class Questions(models.Model):
     question = models.TextField()
     image=models.FileField(upload_to='questionImg/',blank=True,null=True)
     audio=models.FileField(upload_to='questionaudio/',blank=True,null=True)
-    marks = models.IntegerField(null=True, blank=True)
+    marks = models.IntegerField(default=1)
     question_slug = AutoSlugField(populate_from='question', unique=True, default=None)
 
     class Meta:

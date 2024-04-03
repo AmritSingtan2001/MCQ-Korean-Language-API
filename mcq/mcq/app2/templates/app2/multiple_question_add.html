@@ -1,0 +1,190 @@
+
+
+{% extends 'app2/base.html' %}
+{% load static %}
+{% block title %} 
+{% if instance %}Edit Questions{% else %}Edit Questions{% endif %}
+{% endblock %}
+{% block body %}
+
+<title>{% if instance %}Edit Questions{% else %}Edit Questions{% endif %}
+</title>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<style>
+    #id_question,#id_group{
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+      
+    #id_question,#id_marks{
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+</style>
+            <!-- ============================================================== -->
+            <!-- Start Page Content here -->
+            <!-- ============================================================== -->
+
+            <div class="content-page">
+                <div class="content">
+
+                    <!-- Start Content-->
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box">
+                                    <h4 class="page-title">{% if instance %}Edit Questions{% else %}Add Questions{% endif %}
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+                        {% if messages %}
+                            {% for msg in messages %}
+                                <div class="alert alert-{{ msg.tags }} alert-dismissible text-bg-{{ msg.tags }} border-0 fade show" role="alert">
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    <strong>{% if msg.tags == 'success' %}Success{% elif msg.tags == 'warning' %}Warning{% endif %} - </strong>{{ msg.message }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        
+                        <form  id="dynamicForm" action="{% url 'dashboard:multiple_question_add' %}" method="post"  enctype="multipart/form-data" >
+
+                        {% csrf_token %}
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {% for item in questions_range %}
+                            <div class="row pb-2 pt-2 bg-info">
+                                <strong class="text-white">{{forloop.counter}}. Question Number.</strong>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <input type="hidden" name="set_name" id="set_id" value="{{ set_name }}">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="id_question" class="form-label">Group</label><br>
+                                        <input type="text" name="group_{{ forloop.counter }}" class="form-control">
+                                    </div>
+                                </div>
+                        
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="id_question" class="form-label">Marks</label><br>
+                                        <input type="number" name="marks_{{ forloop.counter }}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                        
+                                <div class="col-md-12">
+                                    <div class="mb-1">
+                                        <label for="id_question" class="form-label">Question</label><br>
+                                        <textarea name="question_{{ forloop.counter }}" class="form-control"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-2">
+                                        <label for="id_set_name" class="form-label">Audio</label><br>
+                                        <input type="file" name="audio_{{ forloop.counter }}" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-2">
+                                        <label for="id_set_name" class="form-label">Image</label><br>
+                                        <input type="file" name="image_{{ forloop.counter }}" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                {% for i in loop_times %}
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="mb-2">
+                                                <label for="id_question" class="form-label " style="color:red;">{{ forloop.parentloop.counter }}.Answer</label><br>
+                                                <input type="text" name="answer_{{ forloop.parentloop.counter }}_{{ i }}" class="form-control" placeholder="Enter Answer.">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="mb-2">
+                                                <label for="id_set_name" class="form-label">Audio</label><br>
+                                                <input type="file" name="answer_audio_{{ forloop.parentloop.counter }}_{{ i }}" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="mb-2">
+                                                <label for="id_set_name" class="form-label">Image</label><br>
+                                                <input type="file" name="answer_image_{{ forloop.parentloop.counter }}_{{ i }}" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="mb-2">
+                                                <label for="id_set_name" class="form-label">Is Correct</label><br>
+                                                <input type="checkbox" name="is_correct_{{ forloop.parentloop.counter }}_{{ i }}" class="is-correct-checkbox">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% endfor %}
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                        
+                       
+                        </form>
+
+
+                    </div> <!-- container -->
+
+                </div> <!-- content -->
+             
+
+            </div> <!-- container -->
+
+        </div> <!-- content -->
+        
+    </div> <!-- container -->
+
+</div> <!-- content -->
+
+     
+                
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.7.2/dist/js/bootstrap.bundle.min.js"></script>
+                <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+                
+                <script>
+
+                    
+                     
+
+                    $(document).ready(function() {
+                        $('#id_categorie').change(function() {
+                            var categoryId = $(this).val();
+                            $.ajax({
+                                url: "{% url 'dashboard:get_question_sets' %}",  // Replace with the URL to your view
+                                data: {'category_id': categoryId},
+                                dataType: 'json',
+                                success: function(data) {
+                                    // Update the options in the question set dropdown
+                                    var questionSetDropdown = $('#id_set_name');
+                                    questionSetDropdown.empty();
+                                    $.each(data, function(key, value) {
+                                        questionSetDropdown.append($('<option></option>').attr('value', value.id).text(value.set_name));
+                                    });
+                                }
+                            });
+                        });
+                    });
+
+
+                </script>
+                  
+       {%endblock%}

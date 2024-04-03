@@ -2,10 +2,16 @@
 {% extends 'app2/base.html' %}
 {% load static %}
 {% block title %} 
-Users
+Students
 {% endblock %}
 {% block body %}
-<title>Users</title>
+
+<style>
+    #datatable-buttons_length {
+        visibility: visible;
+    }
+</style>
+
 
             <!-- ============================================================== -->
             <!-- Start Page Content here -->
@@ -15,14 +21,11 @@ Users
                 <div class="content">
 
                     <!-- Start Content-->
-                    <div class="container-fluid">
-                       
-                        <!-- start page title -->
+                    <!-- start page title -->
                         <div class="row">
                             <div class="col-12">
                                 <div class="page-title-box">
-                                  
-                                    <h4 class="page-title">Users</h4>
+                                    <h4 class="page-title">Students</h4>
                                 </div>
                             </div>
                         </div>
@@ -31,178 +34,134 @@ Users
                         <div class="row">
                             <div class="col-12">
                                 <div class="card">
+                                    <div class="card-body row  justify-content-between">
+                                        <div class="col-sm-6">
+                                            <span class="fs-4 text-bold text-uppercase">View All Students</span><br>
+                                            <span>Students / All Students</span>
+                                        </div>
+                                        <div class="col-sm-5 ">
+                                            <a href="{% url 'dashboard:student_register' %}" class="btn btn-danger float-end"><i class="mdi mdi-plus-circle "></i> Add Students</a>
+                                        </div> 
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-12">
+                                <div class="card">
                                     <div class="card-body">
-                                        <div class="row mb-2">
-                                         <div class="col-sm-5">
-                                                {% comment %} <a href="{% url 'dashboard:add_OurTeam'%}" class="btn btn-danger mb-2"><i class="mdi mdi-plus-circle me-2"></i> Add Our Team</a> {% endcomment %}
 
-
-                                            </div> 
-                                        </div>
+                                     
                                         
-
-                                        <div class="table-responsive"style="overflow-x: auto; width: 100%;" >
-                                            <table class="table table-striped dt-responsive w-100 " id=""  >
-                                                    <tr>
-                                                       
-                                                      
-                                                        <th >Id</th>
-                                                        <th >Name</th>
-                                                        <th >Is_User</th>
-
-                                                        <th >Email</th>
-                                                        <th >CreatedDate</th>
-                                                        <th >Phone</th>
-
-                                                        <th >Image</th>
-                                                      
-                                                    </tr>
-                                                                                                
-                                        {%for item in user%}
-
-                                        <tr>
-                                                            
-
-                                  
-                                            <td>
-                                                {{forloop.counter}}
-                                            </td>
-                                            <td>
-                                                {{item.name}}
-                                            </td>
-                                            <td>
-                                                {{item.is_user}}
-                                            </td>
-
-                                         <td>
-                                                {{item.email}}
-                                            </td>
-                                            <td>
-                                                {{item.created_at}}
-                                            </td>
-                                         
-                                            <td>
-                                                {{item.phone_No}}
-                                            </td>
-                                                   
-
-                                            <td>
-                                                {% if item.avatar %}
-                                                <div class="image-gallery">
-                                                    <img class="thumbnail" src="{{item.avatar.url}}" alt="Thumbnail Image">
-                                                    <!-- Aidd more thumbnail images here if you have multiple images in the gallery -->
+                                        {% if messages %}
+                                            {% for msg in messages %}
+                                                <div class="alert alert-{{ msg.tags }} alert-dismissible text-bg-{{ msg.tags }} border-0 fade show" role="alert">
+                                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                    <strong>{% if msg.tags == 'success' %}Success{% elif msg.tags == 'warning' %}Warning{% endif %} - </strong>{{ msg.message }}
                                                 </div>
-                                                <div class="modal" id="imageModal">
-                                                    <span class="close-btn" onclick="closeModal()">&times;</span>
-                                                    <img class="modal-content" id="modalImage">
-                                                </div>
-                                            
-                                                <script src="script.js"></script>
-
-                                                {% else%}
-                                                <div class="image-gallery">
-                                                    <img class="thumbnail" src="{% static 'app2/assets/unknown.png' %}" alt="Thumbnail Image">
-                                                    <!-- Aidd more thumbnail images here if you have multiple images in the gallery -->
-                                                </div>
-                                                <div class="modal" id="imageModal">
-                                                    <span class="close-btn" onclick="closeModal()">&times;</span>
-                                                    <img class="modal-content" id="modalImage">
-                                                </div>
-                                            
-                                                <script src="script.js"></script>
-
-                                                {% endif %}
-                                            </td>
-                                         
-                                            {% comment %} <td style ="display:inline-block; margin-right:5px;" >
-                                                <a href="#OurTeamDeleteModel{{item.id}}" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-                                            </td>  {% endcomment %}
-                                         
-                                        </tr>
-                                        {%endfor%}
-                                                                            
-                             </table>                                         
-                                        
-                                    </div>
-                                    <nav>
-                                        <ul class="pagination pagination-rounded mb-0">
-                                            {% if details.has_previous %}
-                                                <li class="page-item"><a href="?page=1" class="page-link">First</a></li>
-                                                <li class="page-item"><a href="?page={{ details.previous_page_number }}" class="page-link">Previous</a></li>
-                                            {% endif %}
-
-                                            {% for num in details.paginator.page_range %}
-                                                {% if details.number == num %}
-                                                    <li class="page-item active"><a href="?page={{ num }}" class="page-link">{{ num }}</a></li>
-                                                {% else %}
-                                                    <li class="page-item"><a href="?page={{ num }}" class="page-link">{{ num }}</a></li>
-                                                {% endif %}
                                             {% endfor %}
+                                        {% endif %}
 
-                                            {% if details.has_next %}
-                                                <li class="page-item"><a href="?page={{ details.next_page_number }}" class="page-link">Next</a></li>
-                                                <li class="page-item"><a href="?page={{ details.paginator.num_pages }}" class="page-link">Last</a></li>
-                                            {% endif %}
-                                        </ul>
-                                    </nav>
-                                    <div class="modal" id="imageModal">
-                                        <div class="modal-content">
-                                            <img src="" alt="Full Image" class="modal-image" id="modalImage">
-                                        </div>
-                                    </div>
-                                    </div> <!-- end card-body-->
-                                </div> <!-- end card-->
-                            </div> <!-- end col -->
-                        </div>
-                        <!-- end row -->
-                        
+                                        <div class="tab-content">
+                                            <div class="tab-pane show active" id="buttons-table-preview">
+                                                <table id="datatable-buttons" class="table table-striped dt-responsive nowrap w-100">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Id</th>
+                                                            <th>Name</th>
+                                                            <th>Email</th>
+                                                            <th>Contact</th>
+                                                            <th>Image</th>
+                                                            <th style="width:200px">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for student in students %}
+                                                        <tr>
+                                                            <td>{{ forloop.counter }}</td>
+                                                            <td class="text-capitalize">{{ student.name }}</td>
+                                                            <td>{{ student.email }}</td>
+                                                            <td>{{ student.phone_No }}</td>
+                                                            <td>
+                                                                <div class="image-gallery">
+                                                                    <img class="thumbnail object-fit-cover" src="{%if student.avatar %}{{student.avatar.url}}{% endif %}" height="100" width="100" alt="No Image found..">
+                                                                </div>
+                                                                <div class="modal" id="imageModal">
+                                                                    <span class="close-btn" onclick="closeModal()">&times;</span>
+                                                                    <img class="modal-content" id="modalImage" style="height:300px; width:300px; object-fit:cover;" >
+                                                                </div>
+                                                            </td>
+
+                                                            <td>
+                                                                {% comment %} <a href="" class="action-icon" title="view Detail"> <i class="mdi mdi-eye"></i></a> {% endcomment %}
+                                                                <a href="{% url 'dashboard:student_update' student.id %}" class="font-18 text-info" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><i class="uil uil-pen"></i></a>
+                                                                <a href="{% url 'dashboard:student_delete' student.id %}" class="delete" ><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+
+                                                                
+                                                            </td>
+                                                        </tr>
+                                                        {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div> <!-- end preview-->
+                                        </div> <!-- end tab-content-->
+                                        
+                                        
+                                    </div> <!-- end card body-->
+                                </div> <!-- end card -->
+                            </div><!-- end col-->
+                        </div> <!-- end row-->
+
+
+                  
                     </div> <!-- container -->
-                
 
                 </div> <!-- content -->
-                	<!-- Delete Modal HTML -->
-          
- 
-    {% comment %} {% block content %}
-    {% for item in details %}
-        <div class="modal fade"  id="OurTeamDeleteModel{{ item.id }}"  tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content custom-modal">
-                        <div class="modal-footer">
-                            Are you sure you want to delete this purchases Id Number #{{ item.id }}
-                          
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                            <form method="post" action="{% url 'dashboard:deletepurchases' item.id %}">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-danger">Delete</button>
-                            </form>
+
+                {% for student in students %}
+                <div class="modal fade"  id="studentDelete{{student.id}}"  tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content custom-modal">
+                            <div class="modal-footer">
+                                Are you sure you want to delete this Group #{{ student.name}}
+                              
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                <form method="post" action="{% url 'dashboard:student_delete' student.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
+            
                 </div>
-        
-                                </div>
-                    {% endfor %}
-                    <style>
+                {% endfor %}
 
-                    .custom-modal {
-                        background-color: white; 
-                    }
-                    </style>
-                    <link rel="stylesheet" type="text/css" href="{% static 'css/custom.css' %}">
-
-                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-                    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-                    <script>
-                        $(document).ready(function () {
-                            $('#OurTeamdeleteModal').modal('show');
+                <script>
+                    $(document).ready(function() {
+                        $('#datatable-buttons').DataTable({
+                            paging: true, 
+                            searching: true 
                         });
-                    </script>
-                    {% endblock %}  {% endcomment %}
+                    });
+                </script>
 
-                    {% endblock %}
+
+                <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+                <script>
+                $(document).ready(function() {
+                    $('#entries-select').change(function() {
+                    var numEntries = $(this).val();
+                    $('#data-table tbody tr').hide();
+                    $('#data-table tbody tr').slice(0, numEntries).show();
+                    });
+
+                    $('#entries-select').trigger('change');
+                });
+                </script> 
+{% endblock %}
               
 
   

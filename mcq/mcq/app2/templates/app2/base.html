@@ -223,6 +223,14 @@
                                 <span> Question Categories </span>
                             </a>
                         </li>
+
+                        <li class="side-nav-item">
+                            <a href="{% url 'dashboard:purchases' %}" class="side-nav-link">
+                                <i class="uil-bag"></i>
+                                <span> Purchase Sets </span>
+                            </a>
+                        </li>
+
                         <li class="side-nav-item">
                             <a href="{% url 'dashboard:Group' %}" class="side-nav-link">
                                 <i class="uil-document-layout-center"></i>
@@ -230,33 +238,9 @@
                                 <span>  Groups </span>
                             </a>
                         </li>
-                        <li class="side-nav-item">
-                            <a href="{% url 'dashboard:questionSets' %}" class="side-nav-link">
-                                <i class="uil-folder-plus"></i>
-                                <span> Question sets </span>
-                            </a>
-                        </li>
+                        
 
-                        <li class="side-nav-item">
-                            <a href="{% url 'dashboard:collection' %}" class="side-nav-link">
-                                <i class="uil-newspaper"></i>
-                                <span> Packages </span>
-                            </a>
-                        </li>
 
-                        <li class="side-nav-item">
-                            <a href="{% url 'dashboard:purchases' %}" class="side-nav-link">
-                                <i class="uil-layer-group"></i>
-                                <span> Purchases Sets </span>
-                            </a>
-                        </li>
-
-                        <!--<li class="side-nav-item">-->
-                        <!--    <a href="" class="side-nav-link">-->
-                        <!--        <i class="uil-newspaper"></i>-->
-                        <!--        <span> Scores</span>-->
-                        <!--    </a>-->
-                        <!--</li>-->
                         <li class="side-nav-item">
                             <a href="{% url 'dashboard:Score' %}" class="side-nav-link">
                                 <i class="uil-rss"></i>
@@ -276,9 +260,16 @@
                         <li class="side-nav-item">
                             <a href="{% url 'dashboard:user' %}" class="side-nav-link">
                                 <i class="uil-user"></i>
-                                <span> User </span>
+                                <span> Students </span>
                             </a>
                         </li>
+
+                        {% comment %} <li class="side-nav-item">
+                            <a href="" class="side-nav-link">
+                                <i class="uil-user"></i>
+                                <span> Super Admin </span>
+                            </a>
+                        </li> {% endcomment %}
 
                   
                         <!-- ads sections-->

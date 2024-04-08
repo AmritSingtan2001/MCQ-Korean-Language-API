@@ -36,7 +36,7 @@ urlpatterns = [
         
         
         # path('update_question/<int:setid>/<int:question_id>/', views.update_question, name='update_question'),
-        path('edit_Collection/<int:id>/',views.add_edit_Collection,name='edit_Collection'),
+        path('question/sets/<int:id>/',views.add_edit_Collection,name='edit_Collection'),
         path('questionSets',views.questionSets,name='questionSets'),
         path('questionset/delete/<int:id>',views.deletequestionSets, name='delete_question_set'),
         path('deletequestionSets/<int:id>/',views.deletequestionSets,name='deletequestionSets'),
@@ -81,7 +81,10 @@ urlpatterns = [
         path('score/', views.score, name='Score'),
         path('Score-delete/<int:id>/', views.deleteScore, name="deleteScore"),
         #question ajax
-        path('get_question',views.get_question_details, name='get_question_details')
+        path('get_question',views.get_question_details, name='get_question_details'),
+        # test
+        path('create/<int:id>', views.create_questions, name='create_questions'),
+
 
 
 ]+ static (settings.MEDIA_URL, document_root= settings.MEDIA_ROOT)

@@ -1,0 +1,165 @@
+
+{% extends 'app2/base.html' %}
+{% load static %}
+{% block title %} 
+{% if instance %}Edit Student{% else %} Register New Student{% endif %}
+{% endblock %}
+{% block body %}
+<div class="content-page">
+    <div class="content">
+
+        <!-- Start Content-->
+        <div class="container-fluid">
+
+            <!-- start page title -->
+            <div class="card  mt-3">
+                <div class="row p-3">
+                    <div class="col-md-6">
+                        <h4 class="page-title">{% if instance %}Edit Questions{% else %}Add Questions{% endif %}</h4>
+                           
+                    </div>
+                    <div class="col-md-6 text-end fs-5 text-bold">
+                        Set Name:<span class="text-capitalize text-danger text-bold">{{question_set.set_name}}</span><br>
+                        Total Added Question:{{questions_added_count}}<br>
+                        Remaining Question :{{remaining_questions}}<br>
+                    
+                    </div>
+                </div>
+            </div>
+
+            <!-- start page title -->
+            <div class="row card p-2">
+                {% if messages %}
+                    {% for msg in messages %}
+                        <div class="alert alert-{{ msg.tags }} alert-dismissible text-bg-{{ msg.tags }} border-0 fade show" role="alert">
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <strong>{% if msg.tags == 'success' %}Success{% elif msg.tags == 'warning' %}Warning{% endif %} - </strong>{{ msg.message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ formset.management_form }}
+
+                    {% for form in formset|slice:"{{remaining_questions}}" %}
+                    <div class="row form-wrapper">
+                        <div class="col-12 bg-danger text-white mb-2">
+                            {% if questions_added_count %}
+                            <h4>Question Number:{{ questions_added_count|add:forloop.counter }}</h4> 
+
+                            {% else %}
+                            <h4>Question Number:{{ forloop.counter }}</h4> 
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <!-- Group Field -->
+                            <div class="mb-3">
+                                <label for="{{ form.group.id_for_label }}" class="form-label">Group</label><br>
+                                {{ form.group }}
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <!-- Marks Field -->
+                            <div class="mb-3">
+                                <label for="{{ form.marks.id_for_label }}" class="form-label">Marks</label><br>
+                                {{ form.marks }}
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <!-- Question Field -->
+                            <div class="mb-3">
+                                <label for="{{ form.question.id_for_label }}" class="form-label">Question</label><br>
+                                {{ form.question }}
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <!-- Audio Field -->
+                            <div class="mb-3">
+                                <label for="{{ form.audio.id_for_label }}" class="form-label">Audio</label><br>
+                                {{ form.audio }}
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <!-- Image Field -->
+                            <div class="mb-3">
+                                <label for="{{ form.image.id_for_label }}" class="form-label">Image</label><br>
+                                {{ form.image }}
+                            </div>
+                        </div>
+
+                        <!-- Inline Formset for Answers -->
+                        {{ form.answer_set.management_form }}
+                        {% for answer_form in form.answer_set.forms %}
+                        <div class="col-md-6 mb-3">
+                            <div class="">
+                                <label for="{{ answer_form.answer.id_for_label }}" class="form-label">Answer {{ forloop.counter }}</label><br>
+                                {{ answer_form.answer }}
+                            </div>
+                            <div class="">
+                                <label for="{{ answer_form.audio.id_for_label }}" class="form-label">Audio</label><br>
+                                {{ answer_form.audio }}
+                            </div>
+                            <div class="">
+                                <label for="{{ answer_form.image.id_for_label }}" class="form-label">Image</label><br>
+                                {{ answer_form.image }}
+                            </div>
+                            <div class="">
+                                <label for="{{ answer_form.correct.id_for_label }}" class="form-label">Is Correct</label><br>
+                                {{ answer_form.correct }}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endfor %}
+
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <div class="btn btn-danger" id="loadMoreBtn">Load Another</div>
+                </form>
+                
+                {% comment %} <div class="pagination">
+                    {% if formset.has_previous %}
+                        <a href="?page=1">&laquo; First</a>
+                        <a href="?page={{ formset.previous_page_number }}">Previous</a>
+                    {% endif %}
+                
+                    <span class="current">Page {{ formset.number }} of {{ formset.paginator.num_pages }}</span>
+                
+                    {% if formset.has_next %}
+                        <a href="?page={{ formset.next_page_number }}">Next</a>
+                        <a href="?page={{ formset.paginator.num_pages }}">Last &raquo;</a>
+                    {% endif %}
+                </div> {% endcomment %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    var formIndex = {{ formset.forms|length }};
+    var formIncrement = 1;
+
+    $('.form-wrapper:gt(0)').hide(); 
+
+    $('#loadMoreBtn').on('click', function() {
+        var hiddenForms = $('.form-wrapper:hidden'); 
+        var formsToShow = hiddenForms.slice(0, formIncrement); 
+
+        formsToShow.fadeIn(); 
+        if (hiddenForms.length === 0) {
+            $('#loadMoreBtn').hide(); 
+        }
+    });
+});
+</script>
+
+
+    
+{%endblock%}

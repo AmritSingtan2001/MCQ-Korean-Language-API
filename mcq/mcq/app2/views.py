@@ -856,3 +856,68 @@ def deleteGroup(request, id):
         return redirect('dashboard:Group')  # Redirect to a list view after deletion
     else:
         return render(request, 'app2/Group.html', {'details': record})
+    
+
+
+
+# views.py
+# test
+# app/views.py
+
+from django.shortcuts import render, redirect
+from django.forms import formset_factory, inlineformset_factory
+from .forms import QuestionForm, AnswerForm
+from app.models import Questions, Answer
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+def create_questions(request, id=None):
+    set=None
+    if id:
+        set=QuestionSets.objects.get(id=id)
+
+    QuestionFormSet = formset_factory(QuestionForm, extra=40)
+
+    if request.method == 'POST':
+        formset = QuestionFormSet(request.POST, request.FILES, prefix='questions')
+        if formset.is_valid():
+            for form in formset:
+                if form.cleaned_data.get('question'):
+                    question = form.save(commit=False)
+                    question.set_name=set
+                    question.save()
+
+                    AnswerFormSet = inlineformset_factory(
+                        Questions, Answer, form=AnswerForm,
+                        extra=4, can_delete=False
+                    )
+                    answer_formset = AnswerFormSet(request.POST, request.FILES, instance=question, prefix=f'answers_{form.prefix}')
+
+                    if answer_formset.is_valid():
+                        answer_formset.save()
+
+            return redirect('dashboard:question', id=set.id)
+
+    else:
+        formset = QuestionFormSet(prefix='questions')
+        for form in formset:
+            form.answer_set = inlineformset_factory(
+                Questions, Answer, form=AnswerForm,
+                extra=4, can_delete=False
+            )(prefix=f'answers_{form.prefix}')
+        # paginator = Paginator(formset, 1)  # Number of questions per page
+        # page_number = request.GET.get('page')
+        # try:
+        #     paginated_formset = paginator.page(page_number)
+        # except PageNotAnInteger:
+        #     paginated_formset = paginator.page(1)
+        # except EmptyPage:
+        #     paginated_formset = paginator.page(paginator.num_pages)
+    questions_added_count = Questions.objects.filter(set_name=set).count()
+    total_questions_in_set = 40  
+    remaining_questions = total_questions_in_set - questions_added_count
+
+    return render(request, 'app2/test_create_questions.html', {'formset': formset,
+                                                                'question_set': set,
+                                                                'questions_added_count': questions_added_count,
+                                                                'remaining_questions': remaining_questions
+                                                                })

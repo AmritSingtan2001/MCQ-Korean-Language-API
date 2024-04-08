@@ -74,7 +74,7 @@
                                                         </p>
                                                         
                                                         <div class="col-auto mt-3 d-flex">
-                                                            <a href="{% url 'dashboard:addquestion' sets.id %}" class="add btn btn-success " title="Add">Add</a>
+                                                            <a href="{% url 'dashboard:create_questions' sets.id %}" class="add btn btn-success " title="Add">Add</a>
                                                             <a href="{% url 'dashboard:edit_QuestionSets' sets.id %}" class="btn btn-info chat-send waves-effect waves-light ">Edit</a>
                                                             <a href="#QuestionSetsDeleteModel{{sets.id}}" class="delete btn btn-danger " data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete"></i>Delete</a>
                                                                                                                 </div>

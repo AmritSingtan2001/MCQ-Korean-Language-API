@@ -95,3 +95,50 @@ class StudentRegisterForm(forms.ModelForm):
         else:
             raise forms.ValidationError("Password field is required.")
             
+
+
+# forms.py
+# testing
+# app/forms.py
+
+from django import forms
+from django.forms import inlineformset_factory
+from app.models import Questions, Answer
+
+class QuestionForm(forms.ModelForm):
+    class Meta:
+        model = Questions
+        fields = ['group','question', 'image', 'audio', 'marks']
+        labels = {
+            'group':'Select group',
+            'question': 'Question',
+            'image': 'Image (if any)',
+            'audio': 'Audio (if any)',
+            'marks': 'Marks'
+        }
+    def __init__(self, *args, **kwargs):
+        super(QuestionForm, self).__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+            self.fields[field_name].widget.attrs['placeholder'] = f'Enter your {field_name}'
+
+
+class AnswerForm(forms.ModelForm):
+    class Meta:
+        model = Answer
+        fields = ['answer', 'image', 'audio', 'correct']
+        labels = {
+            'answer': 'Answer',
+            'image': 'Image (if any)',
+            'audio': 'Audio (if any)',
+            'correct': 'Is Correct Answer?'
+        }
+    def __init__(self, *args, **kwargs):
+        super(AnswerForm, self).__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+
+            self.fields['correct'].widget = forms.CheckboxInput()
+
+            self.fields['correct'].widget.attrs.update({'class': 'form-check-input'})
+            self.fields[field_name].widget.attrs['placeholder'] = f'Enter your {field_name}'
